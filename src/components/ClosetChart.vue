@@ -13,11 +13,13 @@
   
 <script>
 //   import * as d3 from 'd3';
+import tabOneSvg from '../assets/tab-1.svg'
+import tabTwoSvg from '../assets/tab-2.svg'
 
 export default {
     data() {
         return {
-            tabs: [{ title: "Energy consumption", imageUrl: require('../assets/tab-1.svg') }, { title: "Million metric tons in landfills", imageUrl: require('../assets/tab-2.svg') }],
+            tabs: [{ title: "Energy consumption", imageUrl: tabOneSvg }, { title: "Million metric tons in landfills", imageUrl: tabTwoSvg }],
             yAxis: ['Cotton', 'Polyester', 'Acrylic'],
             xAxis: [],
             selectedTab: 'Cotton',

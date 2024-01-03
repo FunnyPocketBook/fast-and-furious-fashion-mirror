@@ -10,19 +10,10 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import HorizontalLine from './components/HorizontalLine.vue';
 import BannerSection from './components/BannerSection.vue'
 import ClosetChart from './components/ClosetChart.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HorizontalLine,
-    BannerSection,
-    ClosetChart
-  }
-}
 </script>
 
 <style>
