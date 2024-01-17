@@ -8,8 +8,8 @@
                     <div class="subtitle-1 mb-6" style="max-width: 600px;">
                         Not all fashion brands are created equal. Find out which ones are the most transparent about their
                         practices.
+                        <v-btn class="ml-3" variant="outlined" size="x-small">Learn more</v-btn>
                     </div>
-                    <v-btn large class="learn-more-btn">Learn more</v-btn>
                 </v-col>
             </v-row>
         </v-container>
@@ -18,22 +18,44 @@
                 <Filter />
             </v-row>
         </v-container>
+        <v-container>
+            <v-row>
+                <v-col align-self="center">
+                    Final Score Overview
+                    <div class="cart mt-2">
+                        <BrandOveralScore />
+
+                    </div>
+                </v-col>
+                <v-spacer></v-spacer>
+                <v-col align-self="center">
+                    Key Area Breakdown
+                    <div class="cart mt-2">
+                        <BrandByKeyAreaScore />
+                    </div>
+                </v-col>
+            </v-row>
+        </v-container>
     </div>
 </template>
   
 <script>
 import backgroundImage from '../assets/background.svg';
 import Filter from '../components/Filter.vue';
+import BrandByKeyAreaScore from '../components/BrandByKeyAreaScore.vue';
+import BrandOveralScore from '../components/BrandOveralScore.vue';
 
 export default {
     name: 'Dashboard',
     data() {
         return {
-            backgroundImage
+            backgroundImage,
         };
     },
     components: {
-        Filter
+        Filter,
+        BrandByKeyAreaScore,
+        BrandOveralScore
     }
 };
 </script>
@@ -48,14 +70,10 @@ export default {
     width: 100%;
 }
 
-.learn-more-btn {
-    padding: 10px 30px;
-    border: none;
-    font-size: 16px;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 2px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.cart {
+    padding: 24px;
+    border-radius: 4px;
+    background-color: #424242;
 }
 </style>
   
