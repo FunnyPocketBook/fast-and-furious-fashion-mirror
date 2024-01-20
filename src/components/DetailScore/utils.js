@@ -9,22 +9,22 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
     return keys
         .map(key => ({
             section: key,
-            subSection: Object.keys(item[key])
+            subSections: Object.keys(item[key])
                 .map(subSectionKey => ({
-                    key: subSectionKey,
+                    subsectionTitle: subSectionKey,
                     questions: Object.keys(item[key][subSectionKey])
                         .filter(question => qQueries.length
                             ? qQueries.filter(_ => question.toLowerCase().includes(_.toLowerCase())).length > 0
                             : true
                         )
                         .map(question => {
-                            const maxScore = Math.max(...data.map(_ => _[key][subSectionKey][question]))
-                            const scores = data
-                                .filter(_ => brands.indexOf(_.Company) !== -1)
-                                .map(_ => ({
-                                    company: _.Company,
-                                    score: _[key][subSectionKey][question]
-                                }))
+                            const allScores = data.map(_ => ({
+                                company: _.Company,
+                                score: _[key][subSectionKey][question]
+                            }))
+                            // ! todo maxScore can be 0 if it is only comes from the existing data
+                            const maxScore = Math.max(...allScores.map(_ => _.score)) || 1
+                            const scores = allScores.filter(_ => brands.indexOf(_.company) !== -1)
 
                             return {
                                 question,
@@ -35,7 +35,7 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
                 }))
                 .filter(_ => _.questions.length > 0)
         }))
-        .filter(_ => _.subSection.length > 0)
+        .filter(_ => _.subSections.length > 0)
 }
 
 export {

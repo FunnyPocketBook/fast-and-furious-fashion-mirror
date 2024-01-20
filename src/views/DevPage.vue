@@ -13,8 +13,7 @@ const testBrands = ['Nike', 'Gucci', 'Zara']
 
 <style scoped lang="less">
 .dev-page {
-    width: 1200px;
-    margin: 90px auto;
+    margin: 90px 48px;
     border: 1px solid;
     height: 400px;
 }
