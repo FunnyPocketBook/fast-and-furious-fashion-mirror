@@ -18,13 +18,18 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
                             : true
                         )
                         .map(question => {
+                            const maxScore = Math.max(...data.map(_ => _[key][subSectionKey][question]))
                             const scores = data
                                 .filter(_ => brands.indexOf(_.Company) !== -1)
-                                .map(_ => _[key][subSectionKey][question])
+                                .map(_ => ({
+                                    company: _.Company,
+                                    score: _[key][subSectionKey][question]
+                                }))
+
                             return {
                                 question,
                                 scores,
-                                maxScore: Math.max(...scores)
+                                maxScore
                             }
                         })
                 }))

@@ -11,7 +11,7 @@
 
 <script setup>
 import {dataset, getDataSet} from "./utils";
-import {computed, ref} from "vue";
+import {computed, ref, watchEffect} from "vue";
 
 const props = defineProps({
     brands: Array
@@ -23,6 +23,8 @@ const data = computed(() => getDataSet({
     qQueries: qQueries.value || [],
     brands: props.brands || []
 }))
+
+watchEffect(() => console.log(data.value))
 </script>
 
 <style scoped lang="less">
