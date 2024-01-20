@@ -17,7 +17,7 @@
         <img :src="arrowIcon" alt="" style="transform: rotate(-90deg)">
     </button>
 
-    <SectionExplanation class="explanations"/>
+    <SectionExplanation/>
 </template>
 
 <script setup>
