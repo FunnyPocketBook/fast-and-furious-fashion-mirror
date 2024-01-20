@@ -29,8 +29,10 @@
                 </div>
             </div>
             <div class="info-panel">
-                <div class="question-title">Question: </div>
-                <div class="question">{{shownDetail.question}}</div>
+                <div class="question-container">
+                    <div class="question-title">Question: </div>
+                    <div class="question">{{shownDetail.question}}</div>
+                </div>
                 <div class="question-detail">
                     <div v-for="item in shownDetail.scores">
                         <div class="company-name">{{item.company}}</div>
@@ -103,6 +105,11 @@ watchEffect(() => console.log(data.value))
 
 .info-panel {
     padding: 24px;
+
+    .question-container {
+        min-height: 250px;
+    }
+
     .question-title {
         font-size: 16px;
         margin-bottom: 8px;
@@ -110,7 +117,11 @@ watchEffect(() => console.log(data.value))
     }
     .question {
         font-size: 22px;
-        min-height: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
     }
 }
 .vis {
