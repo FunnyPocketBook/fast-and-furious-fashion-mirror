@@ -20,7 +20,7 @@
                         <template v-for="subSection in item.subSections">
                             <template v-for="detail in subSection.questions">
                                 <div class="detail-item"
-                                     :style="getDetailStyle(brand, detail, subSection)"
+                                     :style="getDetailStyle(brand, detail, item)"
                                      @mouseenter="detailClickHandler(detail)"
                                 ></div>
                             </template>
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import {dataset, getDataSet} from "./utils";
+import {colorPatten, dataset, getDataSet} from "./utils";
 import {computed, ref, watchEffect} from "vue";
 
 const props = defineProps({
@@ -64,13 +64,15 @@ const visStyle = computed(() => ({
 const shownDetail = ref({
     question: ''
 })
-const getDetailStyle = (brand, detail, subSection) => {
+const getDetailStyle = (brand, detail, section) => {
+    const color = colorPatten[section.section.substring(0, 1)]
     const gainedScore = detail.scores?.filter(_ => _.company === brand).filter(_ => _.score > 0).length ?? false
     return {
         backgroundColor: gainedScore
+                // ? color
                 ? 'white'
                 : 'rgba(255,255,255,.2)',
-        opacity: detail.question === shownDetail.value?.question ? '1' : '0.7' ,
+        filter: detail.question === shownDetail.value?.question ? 'brightness(1.5)' : null,
         height: `${20 * detail.maxScore}px`
     }
 }
