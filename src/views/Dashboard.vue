@@ -1,79 +1,104 @@
 <template>
-    <div class="dashboard" :style="{ backgroundImage: 'url(' + backgroundImage + ')' }">
-        <v-container>
-            <v-row>
-                <v-col cols="12" sm="10" md="8" class="text-left white--text">
-                    <h1 class="text-h2 mb-4" style="font-weight: bold;">Fashion Brands: The Good, The
-                        Bad, And The Ugly</h1>
-                    <div class="subtitle-1 mb-6" style="max-width: 600px;">
-                        Not all fashion brands are created equal. Find out which ones are the most transparent about their
-                        practices.
-                        <v-btn class="ml-3" variant="outlined" size="x-small">Learn more</v-btn>
-                    </div>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-container>
-            <v-row>
-                <Filter />
-            </v-row>
-        </v-container>
-        <v-container>
-            <v-row>
-                <v-col align-self="center">
-                    Final Score Overview
-                    <div class="cart mt-2">
-                        <BrandOveralScore />
+    <div class="dashboard">
+        <div class="content">
+            <Headline />
 
-                    </div>
-                </v-col>
-                <v-spacer></v-spacer>
-                <v-col align-self="center">
-                    Key Area Breakdown
-                    <div class="cart mt-2">
-                        <BrandByKeyAreaScore />
-                    </div>
-                </v-col>
-            </v-row>
-        </v-container>
+            <div class="filter-container">
+                <Filter />
+            </div>
+
+            <div class="vis-container">
+                <div class="vis">
+                    <div class="title">Final Score Overview</div>
+                    <BrandOveralScore class="card"/>
+                </div>
+                <div class="vis">
+                    <div class="title">Key Area Breakdown</div>
+                    <BrandByKeyAreaScore class="card"/>
+                </div>
+                <div class="vis last-vis">
+                    <div class="title">Score breakdown</div>
+                    <div class="desc">What specific questions are brands answering regarding important spotlight issues?</div>
+                    <DetailScore class="card"/>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
   
-<script>
-import backgroundImage from '../assets/background.svg';
+<script setup>
+import backgroundImage from '../assets/background.jpg';
 import Filter from '../components/Filter.vue';
 import BrandByKeyAreaScore from '../components/BrandByKeyAreaScore.vue';
 import BrandOveralScore from '../components/BrandOveralScore.vue';
+import Headline from "../components/Headline.vue";
+import DetailScore from "../components/DetailScore.vue";
 
-export default {
-    name: 'Dashboard',
-    data() {
-        return {
-            backgroundImage,
-        };
-    },
-    components: {
-        Filter,
-        BrandByKeyAreaScore,
-        BrandOveralScore
-    }
-};
+const bgImageUrl = `url(${backgroundImage})`
 </script>
   
   
-<style scoped>
+<style scoped lang="less">
 .dashboard {
     color: white;
-    background-size: cover;
-    background-position: center center;
+    background-size: contain;
+    background-position: top center;
     min-height: 100vh;
     width: 100%;
+    padding-top: 90px;
+    background-image: v-bind(bgImageUrl);
+
+    .content {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 52px 64px;
+    }
 }
 
-.cart {
-    padding: 24px;
-    border-radius: 4px;
-    background-color: #424242;
+.vis-container {
+    margin-top: 56px;
+    display: grid;
+    min-height: 1000px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-column-gap: 48px;
+    grid-row-gap: 48px;
+}
+
+.vis {
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    .title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 18px;
+        height: 100%;
+
+    }
+
+    .desc {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 100%; /* 16px */
+        letter-spacing: 0.15px;
+        margin-top: -10px;
+        margin-bottom: 18px;
+        opacity: .8;
+    }
+
+    .card {
+        padding: 24px;
+        border-radius: 8px;
+        background-color: #272727;
+        align-self: stretch;
+    }
+}
+
+.last-vis {
+    grid-template-rows: auto auto 1fr; // for desc, not a good method tho
+    grid-column-start: 1;
+    grid-column-end: 3;
 }
 </style>
   

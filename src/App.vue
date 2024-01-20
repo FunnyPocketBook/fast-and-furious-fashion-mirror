@@ -17,9 +17,5 @@ export default {
 };
 </script>
 
-<style>
-.main-content {
-  padding-top: 64px;
-  background-color: black;
-}
+<style scoped lang="less">
 </style>

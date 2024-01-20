@@ -1,19 +1,30 @@
 <template>
-    <v-app-bar color="grey-darken-4">
-        <v-app-bar-title>Fast Fashion</v-app-bar-title>
+    <div class="nav-bar">
+        <div class="title"></div>
 
-        <v-spacer></v-spacer>
-
-        <v-btn text to="/">Dashboard</v-btn>
-        <v-btn text to="/about">About</v-btn>
-    </v-app-bar>
+        <v-btn variant="text" to="/">Dashboard</v-btn>
+        <v-btn variant="text" to="/about">About</v-btn>
+    </div>
 </template>
   
-<script>
-export default {
-    name: 'Navbar',
-};
+<script setup>
 </script>
   
-<style scoped></style>
+<style scoped lang="less">
+.nav-bar {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: 90px;
+    position: absolute;
+    border-bottom: 1px #303030 solid;
+}
+.title {
+    flex: 1;
+}
+
+.v-btn {
+    margin-right: 52px
+}
+</style>
   

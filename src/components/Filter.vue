@@ -1,38 +1,18 @@
 <template>
-    <v-container>
-        <div>
-            <div v-for="description in keyAreaDescriptions" :key="description.title" class="my-2">
-                <div class="text-subtitle-1">{{ description.title }}</div>
-                <div>{{ description.text }}</div>
-            </div>
-        </div>
-
-        <v-row class="mt-3">
-            <v-col>
-                <v-combobox variant="outlined" v-model="selectedBrands" :items="brands" label="Select brand(s)" multiple>
-                    <template v-slot:selection="data">
-                        <v-chip :key="JSON.stringify(data.item)" v-bind="data.attrs" :model-value="data.selected"
-                            :disabled="data.disabled" size="small" @click:close="data.parent.selectItem(data.item)">
-                            <template v-slot:prepend>
-                                <v-avatar class="bg-accent text-uppercase" start>{{ data.item.title.slice(0, 1)
-                                }}</v-avatar>
-                            </template>
-                            {{ data.item.title }}
-                        </v-chip>
-                    </template>
-                </v-combobox>
-            </v-col>
-
-            <v-col>
-                <v-select v-model="selectedYears" :items="years" chips label="Select year(s)" multiple></v-select>
-            </v-col>
-
-            <v-col>
-                <v-select v-model="selectedKeyAreas" :items="keyAreas" chips label="Select key area(s)" multiple></v-select>
-            </v-col>
-        </v-row>
-
-    </v-container>
+    <div class="section-title">Choose your brands</div>
+    <div class="section-desc">You can select up to 7 brands to compare at once.</div>
+    <v-combobox variant="outlined" v-model="selectedBrands" :items="brands" label="Select brand(s)" multiple>
+        <template v-slot:selection="data">
+            <v-chip :key="JSON.stringify(data.item)" v-bind="data.attrs" :model-value="data.selected"
+                    :disabled="data.disabled" size="small" @click:close="data.parent.selectItem(data.item)">
+                <template v-slot:prepend>
+                    <v-avatar class="bg-accent text-uppercase" start>{{ data.item.title.slice(0, 1)
+                        }}</v-avatar>
+                </template>
+                {{ data.item.title }}
+            </v-chip>
+        </template>
+    </v-combobox>
 </template>
   
 <script>
@@ -58,5 +38,24 @@ export default {
 };
 </script>
   
-<style scoped></style>
+<style scoped>
+.section-title {
+    margin-top: 64px;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 32px; /* 133.333% */
+}
+
+.section-desc {
+    opacity: .8;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: .15px;
+    margin-bottom: 18px;
+}
+
+.v-combobox {
+    max-width: 1000px;
+}
+</style>
   
