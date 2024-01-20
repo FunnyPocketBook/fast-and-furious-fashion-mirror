@@ -74,7 +74,7 @@ const getDetailStyle = (brand, detail, section) => {
                 // ? color
                 ? 'white'
                 : 'rgba(255,255,255,.2)',
-        filter: detail.question === shownDetail.value?.question ? 'brightness(1.5)' : null,
+        opacity: detail.question === shownDetail.value?.question ? '1' : '0.8',
         height: `${20 * detail.maxScore}px`
     }
 }
