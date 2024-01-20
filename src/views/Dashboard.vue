@@ -19,7 +19,7 @@
                 <div class="vis last-vis">
                     <div class="title">Score breakdown</div>
                     <div class="desc">What specific questions are brands answering regarding important spotlight issues?</div>
-                    <DetailScore class="card"/>
+                    <DetailScore class="card" :brands="testBrands"/>
                 </div>
             </div>
         </div>
@@ -32,9 +32,11 @@ import Filter from '../components/Filter.vue';
 import BrandByKeyAreaScore from '../components/BrandByKeyAreaScore.vue';
 import BrandOveralScore from '../components/BrandOveralScore.vue';
 import Headline from "../components/Headline.vue";
-import DetailScore from "../components/DetailScore.vue";
+import DetailScore from "../components/DetailScore/DetailScore.vue";
 
 const bgImageUrl = `url(${backgroundImage})`
+
+const testBrands = ['Nike', 'Gucci', 'Zara']
 </script>
   
   
