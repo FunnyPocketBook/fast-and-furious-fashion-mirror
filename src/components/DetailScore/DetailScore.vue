@@ -45,22 +45,20 @@
 </template>
 
 <script setup>
-import {colorPatten, dataset, getDataSet} from "./utils";
+import {colorPatten, dataset, getDataSet} from "./detail-score-utils";
 import {computed, ref, watchEffect} from "vue";
+import {selectedBrand} from "../../store/brand-store";
 
-const props = defineProps({
-    brands: Array
-})
-
+const brands = selectedBrand
 const qQueries = ref([])
 const data = computed(() => getDataSet({
     data: dataset,
     qQueries: qQueries.value || [],
-    brands: props.brands || []
+    brands: selectedBrand.value
 }))
 
 const visStyle = computed(() => ({
-    gridTemplateColumns: (props.brands || []).map(_ => '56px').join(' ') + ' 1fr'
+    gridTemplateColumns: (selectedBrand.value || []).map(_ => '56px').join(' ') + ' 1fr'
 }))
 
 const shownDetail = ref({

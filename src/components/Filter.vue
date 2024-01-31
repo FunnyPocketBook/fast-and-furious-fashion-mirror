@@ -1,41 +1,65 @@
 <template>
     <div class="section-title">Choose your brands</div>
     <div class="section-desc">You can select up to 7 brands to compare at once.</div>
-    <v-combobox variant="outlined" v-model="selectedBrands" :items="brands" label="Select brand(s)" multiple>
+    <v-combobox
+            v-model="selectedBrand"
+            v-model:search="search"
+            variant="outlined"
+            :hide-no-data="false"
+            :items="brandNames"
+            :hint="`Maximum of ${maxBrand} brands`"
+            label="Brands"
+            multiple
+            auto-select-first
+    >
+        <template v-slot:no-data>
+            <v-list-item>
+                <v-list-item-title>
+                    No results matching "<strong>{{ search }}</strong>".
+                </v-list-item-title>
+            </v-list-item>
+        </template>
+
         <template v-slot:selection="data">
-            <v-chip :key="JSON.stringify(data.item)" v-bind="data.attrs" :model-value="data.selected"
-                    :disabled="data.disabled" size="small" @click:close="data.parent.selectItem(data.item)">
+            <v-chip v-bind="data.attrs" :model-value="data.selected">
                 <template v-slot:prepend>
-                    <v-avatar class="bg-accent text-uppercase" start>{{ data.item.title.slice(0, 1)
-                        }}</v-avatar>
+                    <v-avatar class="bg-accent text-uppercase" start>{{ data.item.title.slice(0, 1) }}</v-avatar>
                 </template>
                 {{ data.item.title }}
             </v-chip>
         </template>
     </v-combobox>
 </template>
-  
-<script>
-export default {
-    name: 'SelectionComponent',
-    data() {
-        return {
-            selectedBrands: [],
-            brands: ['Zara', 'Primark', 'Nike', 'Hema', 'Gucci', 'H&M', 'Zalando'],
-            selectedYears: [],
-            years: ['2017', '2018', '2019', '2020', '2021', '2022'],
-            selectedKeyAreas: [],
-            keyAreas: ['Governance', 'Policies', 'Traceability', 'Know, Show, Fix', 'Spotlight Issues'],
-            keyAreaDescriptions: [
-                { title: 'Governance', text: 'Who is responsible for social and environmental impacts in the company?' },
-                { title: 'Policies', text: 'What human rights, environmental policies, and procedures does the company publicly disclose?' },
-                { title: 'Traceability', text: 'Is it easy to track their supply chain?' },
-                { title: 'Know, Show, Fix', text: 'Do they disclose how they identify and resolve issues relating to human rights and the environment?' },
-                { title: 'Spotlight Issues', text: 'Does the brand care about gender & racial equality, decent work & purchasing practices, sustainable sourcing & materials, over consumption of water, minimizing their water footprint, and climate change & biodiversity?' },
-            ],
-        };
-    },
-};
+
+<script setup lang="ts">
+import {selectedBrand} from "../store/brand-store";
+import {getBrandNames} from "../utils/brand-names.ts";
+import {watch, watchEffect} from "vue";
+
+const search = ''
+const brandNames = getBrandNames()
+const maxBrand = 5
+
+// temporary: init 5 brands here
+selectedBrand.value = ['Nike', 'Zara', 'H&M', 'Primark', 'Puma']
+
+watch(selectedBrand, (newValue, oldValue) => {
+    // add new brand
+    if (newValue.length - oldValue.length === 1) {
+        const newAddedBrand = newValue[newValue.length - 1]
+        if (brandNames.indexOf(newAddedBrand) === -1) {
+            // todo error msg
+            selectedBrand.value = oldValue
+        }
+
+        if(newValue.length > maxBrand) {
+            selectedBrand.value = newValue.slice(0, maxBrand)
+            // todo error msg
+            return
+        }
+    }
+})
+
 </script>
   
 <style scoped>

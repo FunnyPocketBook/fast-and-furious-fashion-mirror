@@ -19,7 +19,7 @@
                 <div class="vis last-vis">
                     <div class="title">Score breakdown</div>
                     <div class="desc">What specific questions are brands answering regarding important spotlight issues?</div>
-                    <DetailScore class="card" :brands="testBrands"/>
+                    <DetailScore class="card"/>
                 </div>
             </div>
         </div>
@@ -35,8 +35,6 @@ import Headline from "../components/Headline.vue";
 import DetailScore from "../components/DetailScore/DetailScore.vue";
 
 const bgImageUrl = `url(${backgroundImage})`
-
-const testBrands = ['Nike', 'Gucci', 'Zara']
 </script>
   
   
