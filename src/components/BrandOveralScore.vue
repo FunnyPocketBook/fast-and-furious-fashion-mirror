@@ -16,20 +16,14 @@ const colors = colorPatternForLines
 
 const maxPossible = getMaxPossible()
 const dataset = computed(() => {
-    const originalData = getDetailScoreOfKeyAreas(selectedBrand.value)
-    return originalData.map((dataPerBrand, i) => {
-        return {
-            label: dataPerBrand.brand,
-            color: colors[i],
-            values: dataPerBrand.scores.map(item => {
-                console.log(item)
-                return {
-                    x: +new Date(item.year + '-01-01'),
-                    y: 100 * getSumOfBrand(item) / maxPossible.total
-                }
-            })
-        }
-    })
+    return getDetailScoreOfKeyAreas(selectedBrand.value).map((dataPerBrand, i) => ({
+        label: dataPerBrand.brand,
+        color: colors[i],
+        values: dataPerBrand.scores.map(item => ({
+            x: +new Date(item.year + '-01-01'),
+            y: 100 * getSumOfBrand(item) / maxPossible.total
+        }))
+    }))
 })
 
 
