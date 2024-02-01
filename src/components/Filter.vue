@@ -1,6 +1,6 @@
 <template>
     <div class="section-title">Choose your brands</div>
-    <div class="section-desc">You can select up to 7 brands to compare at once.</div>
+    <div class="section-desc">You can select up to {{maxBrand}} brands to compare at once.</div>
     <v-combobox
             v-model="selectedBrand"
             v-model:search="search"
@@ -34,14 +34,14 @@
 <script setup lang="ts">
 import {selectedBrand} from "../store/brand-store";
 import {getBrandNames} from "../utils/brand-names.ts";
-import {watch, watchEffect} from "vue";
+import {watch} from "vue";
 
 const search = ''
 const brandNames = getBrandNames()
-const maxBrand = 5
+const maxBrand = 7
 
 // temporary: init 5 brands here
-selectedBrand.value = ['Nike', 'Zara', 'H&M', 'Primark', 'Puma']
+selectedBrand.value = ['Nike', 'Zara', 'H&M', 'Primark', 'Puma', 'Gucci', 'Hema']
 
 watch(selectedBrand, (newValue, oldValue) => {
     // add new brand

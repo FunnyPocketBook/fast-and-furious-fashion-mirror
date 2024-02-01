@@ -18,7 +18,8 @@
                 </div>
                 <div class="vis last-vis">
                     <div class="title">Score breakdown</div>
-                    <div class="desc">What specific questions are brands answering regarding important spotlight issues?</div>
+                    <div class="desc">To calculate their scores in each key area, brands had to answer over 300 questions regarding important issues, such as the ones below.  If a brand has 0 points for a question, it means
+                        they refused to answer the question. A score of 1 means they have disclosed what their practices are, which increases their transparency.</div>
                     <DetailScore class="card"/>
                 </div>
             </div>
