@@ -11,12 +11,12 @@ const dataset: Record<string, Record<string, {
 
 const maxScores = _maxScores as any
 
-const getSumOfBrand = (item: any) => {
-    return (item.Governance || 0) +
-        (item.Policies || 0) +
-        (item.Traceability || 0) +
-        (item['Know, Show, & Fix'] || 0) +
-        (item['Spotlight Issues'] || 0)
+export const getSumOfBrand = (brand: any) => {
+    return (brand.Governance || 0) +
+        (brand.Policies || 0) +
+        (brand.Traceability || 0) +
+        (brand['Know, Show, & Fix'] || 0) +
+        (brand['Spotlight Issues'] || 0)
 }
 export const getDetailScoreOfKeyAreas = (brands: string[]) => {
     const years = ['2017', '2018', '2019', '2020', '2021', '2022', '2023']
