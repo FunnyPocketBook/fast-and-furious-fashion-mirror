@@ -12,6 +12,11 @@
             <v-btn variant="text" @click="qQueries=['Animal']">Animal</v-btn>
         </div>
         <div class="vis" :style="visStyle">
+            <div class="left-info">
+                <div class="left-info-brand">BRAND</div>
+                <div></div>
+                <div class="left-info-point">POINTS</div>
+            </div>
             <div v-for="brand in brands">
                 <div class="brand-name">{{brand}}</div>
                 <div class="detail-container">
@@ -27,6 +32,7 @@
                         </template>
                     </template>
                 </div>
+                <div class="point">point</div>
             </div>
             <div class="info-panel" v-if="shownDetail?.question">
                 <div class="title">STATEMENT</div>
@@ -61,7 +67,7 @@ const questionNumber = computed(() => {
 })
 
 const visStyle = computed(() => ({
-    gridTemplateColumns: (selectedBrand.value || []).map(_ => '90px').join(' ') + ' 1fr'
+    gridTemplateColumns: '.3fr ' + (selectedBrand.value || []).map(_ => '.3fr').join(' ') + ' 1fr'
 }))
 
 const shownDetail = ref({
@@ -108,9 +114,42 @@ watchEffect(() => console.log(data.value))
     grid-template-columns: 1fr 4fr;
 }
 
+.left-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .brand-name {
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        display: block;
+        bottom: -4px;
+        left: -6px;
+        right: -6px;
+        height: 1px;
+        background: white;
+    }
+}
+
+.point {
+    margin-top: 8px;
+    text-align: center;
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        display: block;
+        top: -2px;
+        left: -6px;
+        right: -6px;
+        height: 1px;
+        background: white;
+    }
 }
 
 .info-panel {
@@ -168,5 +207,9 @@ watchEffect(() => console.log(data.value))
 .score {
     text-align: center;
     font-size: 30px;
+}
+
+.left-info {
+    text-align: center;
 }
 </style>
