@@ -7,10 +7,12 @@
 <script setup>
 import * as d3 from 'd3';
 import {computed, nextTick, onMounted, ref, watch, watchEffect} from "vue";
-import {getDetailScoreOfKeyAreas} from "../utils/data";
+import {getDetailScoreOfKeyAreas, getMaxPossible} from "../utils/data";
 import {selectedBrand} from "../store/brand-store";
 import {interaction} from "../store/interaction-store";
 
+const maxPossible = getMaxPossible()
+const normalizeDivisor = maxPossible.total / 100
 const brands = selectedBrand
 const year = ref("2023")
 const data = computed(() => getDetailScoreOfKeyAreas(brands.value, year.value))
@@ -18,7 +20,6 @@ const data = computed(() => getDetailScoreOfKeyAreas(brands.value, year.value))
 const colors = computed(() => {
     let result = ['#33B1FF', '#8A3FFC', '#0D8289', '#FF7EB6', '#FA4D56']
     const index = keyAreas.indexOf(interaction.hoveringAspect)
-    console.log(index)
     if (index !== -1) {
         result = result.map(((c, i) => c + (i !== index ? '50': '')))
     }
@@ -27,7 +28,7 @@ const colors = computed(() => {
 const keyAreas = ['Governance', 'Policies', 'Traceability', 'Know, Show, & Fix', 'Spotlight Issues']
 const svgRef = ref(null)
 const drawChart = () => {
-    const margin = { top: 30, right: 20, bottom: 30, left: 40 };
+    const margin = { top: 30, right: 20, bottom: 30, left: 50 };
     const width = 580 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -38,8 +39,8 @@ const drawChart = () => {
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const x = d3.scaleLinear()
-            .domain([0, 50]) // Assuming score is out of 50
-            .range([0, width]);
+            .domain([0, 100]) // Assuming score is out of 50
+            .range([0, width])
 
     const y = d3.scaleBand()
             .domain(data.value.map(d => d.brand))
@@ -67,9 +68,8 @@ const drawChart = () => {
             .data(d => d)
             .enter().append('rect')
             .attr('y', d => y(d.data.brand))
-            // todo, change the temporary / 4
-            .attr('x', d => x(d[0]) / 4)
-            .attr('width', d => x(d[1]) / 4 - x(d[0]) / 4)
+            .attr('x', d => x(d[0]) / normalizeDivisor)
+            .attr('width', d => x(d[1]) / normalizeDivisor - x(d[0]) / normalizeDivisor)
             .attr('height', y.bandwidth());
 
     // Add the X Axis
@@ -118,5 +118,6 @@ onMounted(drawChart)
 watch([brands, colors], redraw)
 </script>
   
-<style scoped></style>
+<style scoped>
+</style>
   
