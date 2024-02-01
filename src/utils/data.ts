@@ -1,4 +1,5 @@
 import allYearsSections from '../data/all_years_sections.json'
+import _maxScores from '../data/max_scores.json'
 
 const dataset: Record<string, Record<string, {
     section1: number| null
@@ -7,6 +8,8 @@ const dataset: Record<string, Record<string, {
     section4: number| null
     section5: number| null
 }>> = allYearsSections as any
+
+const maxScores = _maxScores as any
 
 const getSumOfBrand = (item: any) => {
     return (item.Governance || 0) +
@@ -28,4 +31,21 @@ export const getDetailScoreOfKeyAreas = (brands: string[], year: string) => {
             }
         })
         .sort((a, b) => getSumOfBrand(b) - getSumOfBrand(a))
+}
+
+export const getMaxPossible = () => {
+    const result: Record<string, number> = {
+        total: 0,
+    }
+    Object.entries(maxScores).forEach(([sectionName, section]) => {
+        result[sectionName] = 0
+        Object.entries(section as any).forEach(([_, questions]) => {
+            result[sectionName] += Object.values(questions as any).reduce((accumulator, a: any) => {
+                return accumulator as number + a;
+            }, 0) as number
+        })
+        result.total += result[sectionName]
+    });
+
+    return result
 }
