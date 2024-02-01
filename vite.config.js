@@ -7,4 +7,7 @@ export default defineConfig({
         'process.env': {}
     },
     plugins: [vue()],
+    build: {
+        outDir: 'public'
+    }
 })
