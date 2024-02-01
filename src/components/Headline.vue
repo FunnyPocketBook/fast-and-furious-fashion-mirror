@@ -14,7 +14,7 @@
             <span>Explore the data</span>
             <img :src="arrowIcon" alt="">
         </button>
-        <router-link class="title-button" @click="onClickMore" to="/about">
+        <router-link class="title-button" to="/about">
             <span>Learn more</span>
             <img :src="arrowIcon" alt="" style="transform: rotate(-90deg)">
         </router-link>
