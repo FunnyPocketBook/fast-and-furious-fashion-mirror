@@ -41,7 +41,7 @@ const brandNames = getBrandNames()
 const maxBrand = 7
 
 // temporary: init 5 brands here
-selectedBrand.value = ['Nike', 'Zara', 'H&M', 'Primark', 'Puma', 'Gucci', 'Hema']
+selectedBrand.value = ['Nike', 'Zara', 'H&M', 'Primark', 'Puma', 'Gucci', 'Adidas']
 
 watch(selectedBrand, (newValue, oldValue) => {
     // add new brand

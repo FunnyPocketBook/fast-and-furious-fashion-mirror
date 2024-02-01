@@ -61,7 +61,7 @@ const bgImageUrl = `url(${backgroundImage})`
     display: grid;
     min-height: 1000px;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1.8fr;
     grid-column-gap: 48px;
     grid-row-gap: 48px;
 }

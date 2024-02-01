@@ -6,6 +6,8 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
         .keys(item)
         .filter(key => key !== 'Company' && key !== 'Country')
 
+    const questionList = []
+
     return keys
         .map(key => ({
             section: key,
@@ -13,11 +15,13 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
                 .map(subSectionKey => ({
                     subsectionTitle: subSectionKey,
                     questions: Object.keys(item[key][subSectionKey])
+                        .filter(question => questionList.indexOf(question) === -1) // repeated question
                         .filter(question => qQueries.length
                             ? qQueries.filter(_ => question.toLowerCase().includes(_.toLowerCase())).length > 0
                             : true
                         )
                         .map(question => {
+                            questionList.push(question)
                             const allScores = data.map(_ => ({
                                 company: _.Company,
                                 score: _[key][subSectionKey][question]

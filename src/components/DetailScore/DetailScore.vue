@@ -10,7 +10,6 @@
             <v-btn variant="text" @click="qQueries=[]">All</v-btn>
             <v-btn variant="text" @click="qQueries=['disclose']">Disclose</v-btn>
             <v-btn variant="text" @click="qQueries=['Animal']">Animal</v-btn>
-
         </div>
         <div class="vis" :style="visStyle">
             <div v-for="brand in brands">
@@ -20,26 +19,20 @@
                         <template v-for="subSection in item.subSections">
                             <template v-for="detail in subSection.questions">
                                 <div class="detail-item"
+                                     :class="getDetailClass(brand, detail, item)"
                                      :style="getDetailStyle(brand, detail, item)"
-                                     @mouseenter="detailClickHandler(detail)"
+                                     @mouseenter="detailItemMouseEnter(detail)"
                                 ></div>
                             </template>
                         </template>
                     </template>
                 </div>
             </div>
-            <div class="info-panel">
-                <div class="question-container">
-                    <div class="question-title">Question: </div>
-                    <div class="question">{{shownDetail.question}}</div>
-                </div>
-                <div class="question-detail">
-                    <div v-for="item in shownDetail.scores">
-                        <div class="company-name">{{item.company}}</div>
-                        <div class="score">{{item.score}}</div>
-                    </div>
-                </div>
+            <div class="info-panel" v-if="shownDetail?.question">
+                <div class="title">STATEMENT</div>
+                <div class="content">{{shownDetail.question}}</div>
             </div>
+            <div v-else></div>
         </div>
     </div>
 </template>
@@ -57,28 +50,49 @@ const data = computed(() => getDataSet({
     brands: selectedBrand.value
 }))
 
+const questionNumber = computed(() => {
+    let result = 0
+    data.value.forEach(section => {
+        section.subSections.forEach(subSection => {
+            result += subSection.questions.length
+        })
+    })
+    return result
+})
+
 const visStyle = computed(() => ({
-    gridTemplateColumns: (selectedBrand.value || []).map(_ => '56px').join(' ') + ' 1fr'
+    gridTemplateColumns: (selectedBrand.value || []).map(_ => '90px').join(' ') + ' 1fr'
 }))
 
 const shownDetail = ref({
     question: ''
 })
+
+const getDetailClass = (brand, detail, selection) => {
+    const isHighlighted = detail.question === shownDetail.value?.question
+    return [
+            isHighlighted ? 'highlight-item' : '',
+    ]
+}
 const getDetailStyle = (brand, detail, section) => {
     const color = colorPatten[section.section.substring(0, 1)]
     const gainedScore = detail.scores?.filter(_ => _.company === brand).filter(_ => _.score > 0).length ?? false
     return {
         backgroundColor: gainedScore
-                // ? color
-                ? 'white'
-                : 'rgba(255,255,255,.2)',
-        opacity: detail.question === shownDetail.value?.question ? '1' : '0.8',
-        height: `${20 * detail.maxScore}px`
+                ? color
+                // ? 'white'
+                : '#191a1a',
+        height: `${20 * detail.maxScore}px`,
+        marginBottom: questionNumber.value > 100 ? '1px' : '4px'
     }
 }
 
-const detailClickHandler = (detail) => {
+const detailItemMouseEnter = (detail) => {
     shownDetail.value = detail
+}
+
+const detailItemMouseLeave = () => {
+    shownDetail.value = null
 }
 
 // for debug
@@ -98,29 +112,15 @@ watchEffect(() => console.log(data.value))
     text-align: center;
     margin-bottom: 8px;
 }
-.form {
-}
 
 .info-panel {
-    padding: 24px;
-
-    .question-container {
-        min-height: 250px;
-    }
-
-    .question-title {
-        font-size: 16px;
-        margin-bottom: 8px;
-        opacity: 0.7;
-    }
-    .question {
-        font-size: 22px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 5;
-        -webkit-box-orient: vertical;
-    }
+    word-break: break-word;
+    padding: 21px 18px;
+    background: #4a4a4a;
+    border-radius: 4px;
+    max-height: 670px;
+    overflow: auto;
+    text-overflow: ellipsis;
 }
 .vis {
     display: grid;
@@ -130,10 +130,31 @@ watchEffect(() => console.log(data.value))
 .detail-container {
     display: flex;
     flex-direction: column;
-    height: 320px;
+    height: 640px;
+    position: relative;
 }
-.detail-item {
-    margin-bottom: 1px;
+.highlight-item {
+    outline: solid #4a4a4a 1px;
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        background: #4a4a4a;
+        left: -10px;
+        width: 10px;
+        bottom: -1px;
+        top: -1px;
+        border-radius: 4px 0 0 4px;
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        background: #4a4a4a;
+        right: -10px;
+        width: 10px;
+        bottom: -1px;
+        top: -1px;
+    }
 }
 .question-detail {
     display: grid;
