@@ -5,3 +5,9 @@ export const interaction = reactive({
     hoveringAspect: '',
     hoveringQuestion: ''
 })
+
+export const resetInteraction= () => {
+    interaction.hoveringBrand = ''
+    interaction.hoveringAspect = ''
+    interaction.hoveringQuestion = ''
+}

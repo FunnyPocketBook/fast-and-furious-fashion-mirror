@@ -26,7 +26,7 @@
                                 <div class="detail-item"
                                      :class="getDetailClass(brand, detail, item)"
                                      :style="getDetailStyle(brand, detail, item)"
-                                     @mouseenter="detailItemMouseEnter(detail)"
+                                     @mouseenter="detailItemMouseEnter(brand, detail, item)"
                                 ></div>
                             </template>
                         </template>
@@ -47,6 +47,8 @@
 import {colorPatten, dataset, getDataSet} from "./detail-score-utils";
 import {computed, ref, watchEffect} from "vue";
 import {selectedBrand} from "../../store/brand-store";
+import {interaction, resetInteraction} from "../../store/interaction-store";
+import {sectionAspectMap} from "../../utils/aspects";
 
 const brands = selectedBrand
 const qQueries = ref([])
@@ -110,16 +112,21 @@ const getDetailStyle = (brand, detail, section) => {
     }
 }
 
-const detailItemMouseEnter = (detail) => {
+const detailItemMouseEnter = (brand, detail, section) => {
     shownDetail.value = detail
+
+    interaction.hoveringBrand = brand
+    interaction.hoveringAspect = sectionAspectMap[section.section]
+    interaction.hoveringQuestion = detail.question
 }
 
 const detailItemMouseLeave = () => {
     shownDetail.value = null
+    resetInteraction()
 }
 
 // for debug
-watchEffect(() => console.log(data.value))
+// watchEffect(() => console.log(data.value))
 </script>
 
 <style scoped lang="less">

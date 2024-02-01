@@ -1,4 +1,5 @@
 import dataset from '../../data/fashion_2023.json'
+import maxScores from '../../data/max_scores.json'
 
 const getDataSet = ({ data, qQueries = [], brands = []}) => {
     const item = data[0]
@@ -26,8 +27,8 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
                                 company: _.Company,
                                 score: _[key][subSectionKey][question]
                             }))
-                            // ! todo maxScore can be 0 if it is only comes from the existing data
-                            const maxScore = Math.max(...allScores.map(_ => _.score)) || 1
+
+                            const maxScore = maxScores[key][subSectionKey][question] || 1
                             const scores = allScores.filter(_ => brands.indexOf(_.company) !== -1)
 
                             return {
