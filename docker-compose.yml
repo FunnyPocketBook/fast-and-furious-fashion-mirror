@@ -1,0 +1,7 @@
+services:
+  web:
+    container_name: fast-and-furious-fashion
+    image: ghcr.io/FunnyPocketBook/fast-and-furious-fashion:main
+    restart: no
+    ports:
+      - 8080:8080
