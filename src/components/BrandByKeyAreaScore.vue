@@ -1,5 +1,24 @@
 <template>
     <div>
+        <div class="slider-container">
+            <div class="title">CHANGE YEAR: </div>
+            <v-slider
+                    :ticks="years"
+                    :max="6"
+                    v-model="year"
+                    step="1"
+                    show-ticks="always"
+                    tick-size="4"
+                    color="#4a4a4a"
+                    track-color="#888888"
+                    :thumb-label="true"
+                    thumb-color="#aaaaaa"
+            >
+                <template v-slot:thumb-label="{ modelValue }">
+                    {{ modelValue + 2017 }}
+                </template>
+            </v-slider>
+        </div>
         <svg ref="svgRef"></svg>
     </div>
 </template>
@@ -8,14 +27,28 @@
 import * as d3 from 'd3';
 import {computed, nextTick, onMounted, ref, watch, watchEffect} from "vue";
 import {getDetailScoreOfKeyAreas, getMaxPossible} from "../utils/data";
-import {selectedBrand} from "../store/brand-store";
+import {selectedBrand, selectedYear} from "../store/brand-store";
 import {interaction} from "../store/interaction-store";
 
 const maxPossible = getMaxPossible()
 const normalizeDivisor = maxPossible.total / 100
 const brands = selectedBrand
-const year = ref("2023")
-const data = computed(() => getDetailScoreOfKeyAreas(brands.value, year.value))
+
+const year = ref(6)
+watch(year, () => {
+    selectedYear.value = year.value + 2017 + ''
+})
+
+const years = {
+    0: '2017',
+    1: '2018',
+    2: '2019',
+    3: '2020',
+    4: '2021',
+    5: '2022',
+    6: '2023'
+}
+const data = computed(() => getDetailScoreOfKeyAreas(brands.value, selectedYear.value))
 
 const colors = computed(() => {
     let result = ['#33B1FF', '#8A3FFC', '#0D8289', '#FF7EB6', '#FA4D56']
@@ -26,6 +59,7 @@ const colors = computed(() => {
     return result
 })
 const keyAreas = ['Governance', 'Policies', 'Traceability', 'Know, Show, & Fix', 'Spotlight Issues']
+
 const svgRef = ref(null)
 const drawChart = () => {
     const margin = { top: 30, right: 20, bottom: 30, left: 50 };
@@ -115,9 +149,19 @@ const redraw = async () => {
 }
 
 onMounted(drawChart)
-watch([brands, colors], redraw)
+watch([brands, colors, selectedYear], redraw)
 </script>
   
 <style scoped>
+.slider-container {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 150px 1fr;
+    margin-bottom: -24px;
+
+    .title {
+        margin-bottom: 20px
+    }
+}
 </style>
   
