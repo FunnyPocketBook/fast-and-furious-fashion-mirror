@@ -48,7 +48,14 @@ const years = {
     5: '2022',
     6: '2023'
 }
-const data = computed(() => getDetailScoreOfKeyAreas(brands.value, selectedYear.value))
+const data = computed(() => {
+    return getDetailScoreOfKeyAreas(brands.value)
+            .map(item => ({
+                ...item,
+                scores: undefined,
+                ...item.scores[year.value] // tired... it works at least...
+            }))
+})
 
 const colors = computed(() => {
     let result = ['#33B1FF', '#8A3FFC', '#0D8289', '#FF7EB6', '#FA4D56']

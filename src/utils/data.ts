@@ -18,19 +18,23 @@ const getSumOfBrand = (item: any) => {
         (item['Know, Show, & Fix'] || 0) +
         (item['Spotlight Issues'] || 0)
 }
-export const getDetailScoreOfKeyAreas = (brands: string[], year: string) => {
+export const getDetailScoreOfKeyAreas = (brands: string[]) => {
+    const years = ['2017', '2018', '2019', '2020', '2021', '2022', '2023']
     return brands
         .map(brand => {
             return {
                 brand,
-                Governance: dataset[brand][year].section1,
-                Policies: dataset[brand][year].section2,
-                Traceability: dataset[brand][year].section3,
-                'Know, Show, & Fix': dataset[brand][year].section4,
-                'Spotlight Issues': dataset[brand][year].section5,
+                scores: years.map(year => ({
+                    year,
+                    Governance: dataset[brand][year].section1,
+                    Policies: dataset[brand][year].section2,
+                    Traceability: dataset[brand][year].section3,
+                    'Know, Show, & Fix': dataset[brand][year].section4,
+                    'Spotlight Issues': dataset[brand][year].section5,
+                }))
             }
         })
-        .sort((a, b) => getSumOfBrand(b) - getSumOfBrand(a))
+        .sort((a, b) => getSumOfBrand(b.scores[b.scores.length - 1]) - getSumOfBrand(a.scores[a.scores.length - 1]))
 }
 
 export const getMaxPossible = () => {
