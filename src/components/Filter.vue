@@ -29,16 +29,36 @@
             </v-chip>
         </template>
     </v-combobox>
+
+    <v-snackbar
+            v-model="snackbar"
+            location="top"
+    >
+        {{ snackbarText }}
+
+        <template v-slot:actions>
+            <v-btn
+                    color="pink"
+                    variant="text"
+                    @click="snackbar = false"
+            >
+                Close
+            </v-btn>
+        </template>
+    </v-snackbar>
 </template>
 
 <script setup lang="ts">
 import {selectedBrand} from "../store/brand-store";
 import {getBrandNames} from "../utils/brand-names.ts";
-import {watch} from "vue";
+import {ref, watch} from "vue";
 
 const search = ''
 const brandNames = getBrandNames()
 const maxBrand = 7
+
+const snackbar = ref(false)
+const snackbarText = ref('')
 
 // temporary: init 5 brands here
 selectedBrand.value = ['Nike', 'Zara', 'H&M', 'Primark', 'Puma', 'Gucci', 'Adidas']
@@ -48,13 +68,15 @@ watch(selectedBrand, (newValue, oldValue) => {
     if (newValue.length - oldValue.length === 1) {
         const newAddedBrand = newValue[newValue.length - 1]
         if (brandNames.indexOf(newAddedBrand) === -1) {
-            // todo error msg
+            snackbar.value = true
+            snackbarText.value = 'No matching result for ' + newAddedBrand + '.'
             selectedBrand.value = oldValue
         }
 
         if(newValue.length > maxBrand) {
             selectedBrand.value = newValue.slice(0, maxBrand)
-            // todo error msg
+            snackbar.value = true
+            snackbarText.value = 'You can only select 7 brands.'
             return
         }
     }
