@@ -8,21 +8,39 @@
         <p>Not all fashion brands are created equal. Find out which ones are the most transparent about their practices.</p>
     </div>
 
-    <button class="title-button">
-        <span>Explore the data</span>
-        <img :src="arrowIcon" alt="">
-    </button>
-    <button class="title-button">
-        <span>Learn more</span>
-        <img :src="arrowIcon" alt="" style="transform: rotate(-90deg)">
-    </button>
-
     <SectionExplanation/>
+    <div class="button-container">
+        <button class="title-button" @click="onClickExplore">
+            <span>Explore the data</span>
+            <img :src="arrowIcon" alt="">
+        </button>
+        <router-link class="title-button" @click="onClickMore" to="/about">
+            <span>Learn more</span>
+            <img :src="arrowIcon" alt="" style="transform: rotate(-90deg)">
+        </router-link>
+    </div>
 </template>
 
 <script setup>
 import SectionExplanation from "./SectionExplanation.vue";
 import arrowIcon from "../assets/arrow-down.svg"
+
+const heightToTop = (ele) => {
+    let root = document.body
+    let height = 0
+    do {
+        height += ele.offsetTop
+        ele = ele.offsetParent
+    } while( ele !== root )
+    return height
+}
+const onClickExplore = () => {
+    const anchor = document.querySelector('#explore-button-anchor')
+    window.scrollTo({
+        top:heightToTop(anchor) - 32,
+        behavior:'smooth'
+    })
+}
 </script>
 
 <style scoped lang="less">
@@ -74,5 +92,14 @@ import arrowIcon from "../assets/arrow-down.svg"
     img {
         margin-right: 10px;
     }
+}
+
+a {
+    text-decoration: none;
+    color: white
+}
+
+.button-container {
+    margin-top: 64px;
 }
 </style>

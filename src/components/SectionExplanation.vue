@@ -59,7 +59,7 @@ const items = [
     font-size: 24px;
     font-weight: 500;
     line-height: 32px; /* 133.333% */
-    margin-top: 64px;
+    margin-top: 32px;
 }
 .section-explanation {
     margin-top: 18px;

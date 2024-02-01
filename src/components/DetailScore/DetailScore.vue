@@ -27,6 +27,7 @@
                                      :class="getDetailClass(brand, detail, item)"
                                      :style="getDetailStyle(brand, detail, item)"
                                      @mouseenter="detailItemMouseEnter(brand, detail, item)"
+                                     @mouseleave="detailItemMouseLeave"
                                 ></div>
                             </template>
                         </template>
@@ -44,11 +45,12 @@
 </template>
 
 <script setup>
-import {colorPatten, dataset, getDataSet} from "./detail-score-utils";
+import {dataset, getDataSet} from "./detail-score-utils";
 import {computed, ref, watchEffect} from "vue";
 import {selectedBrand} from "../../store/brand-store";
 import {interaction, resetInteraction} from "../../store/interaction-store";
 import {sectionAspectMap} from "../../utils/aspects";
+import {colorPattenForAspects} from "../../utils/color";
 
 const brands = selectedBrand
 const qQueries = ref([])
@@ -100,7 +102,7 @@ const getDetailClass = (brand, detail, selection) => {
     ]
 }
 const getDetailStyle = (brand, detail, section) => {
-    const color = colorPatten[section.section.substring(0, 1)]
+    const color = colorPattenForAspects[sectionAspectMap[section.section]]
     const gainedScore = detail.scores?.filter(_ => _.company === brand).filter(_ => _.score > 0).length ?? false
     return {
         backgroundColor: gainedScore

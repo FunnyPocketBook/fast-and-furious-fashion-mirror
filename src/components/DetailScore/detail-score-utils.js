@@ -43,16 +43,7 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
         .filter(_ => _.subSections.length > 0)
 }
 
-const colorPatten = {
-    '1': '#33B1FF',
-    '2': '#8A3FFC',
-    '3': '#0D8289',
-    '4': '#0D8289',
-    '5': '#FA4D56'
-}
-
 export {
     dataset,
     getDataSet,
-    colorPatten
 }

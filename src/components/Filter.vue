@@ -1,5 +1,5 @@
 <template>
-    <div class="section-title">Choose your brands</div>
+    <div class="section-title" id="explore-button-anchor">Choose your brands</div>
     <div class="section-desc">You can select up to {{maxBrand}} brands to compare at once.</div>
     <v-combobox
             v-model="selectedBrand"

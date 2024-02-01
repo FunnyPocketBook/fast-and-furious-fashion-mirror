@@ -1,6 +1,6 @@
 import dataset from '../data/fashion_2023.json'
 
-let brandNames = []
+let brandNames: string[] = []
 
 export const getBrandNames = () => {
     if (brandNames.length) return brandNames
