@@ -32,7 +32,7 @@
                         </template>
                     </template>
                 </div>
-                <div class="point">point</div>
+                <div class="point">{{ pointListForBrands[brand] }}</div>
             </div>
             <div class="info-panel" v-if="shownDetail?.question">
                 <div class="title">STATEMENT</div>
@@ -61,6 +61,23 @@ const questionNumber = computed(() => {
     data.value.forEach(section => {
         section.subSections.forEach(subSection => {
             result += subSection.questions.length
+        })
+    })
+    return result
+})
+
+const pointListForBrands = computed(() => {
+    let result = {}
+    brands.value.forEach(brand => {
+        result[brand] = 0
+    })
+    data.value.forEach(section => {
+        section.subSections.forEach(subSection => {
+            subSection.questions.forEach(question => {
+                question.scores.forEach(record => {
+                    result[record.company] += record.score
+                })
+            })
         })
     })
     return result
@@ -137,14 +154,14 @@ watchEffect(() => console.log(data.value))
 }
 
 .point {
-    margin-top: 8px;
+    margin-top: 16px;
     text-align: center;
     position: relative;
     &::before {
         content: '';
         position: absolute;
         display: block;
-        top: -2px;
+        top: -8px;
         left: -6px;
         right: -6px;
         height: 1px;
@@ -169,7 +186,7 @@ watchEffect(() => console.log(data.value))
 .detail-container {
     display: flex;
     flex-direction: column;
-    height: 640px;
+    height: 600px;
     position: relative;
 }
 .highlight-item {
@@ -183,7 +200,7 @@ watchEffect(() => console.log(data.value))
         width: 10px;
         bottom: -1px;
         top: -1px;
-        border-radius: 4px 0 0 4px;
+        border-radius: 1000px 0 0 1000px;
     }
     &::after {
         content: '';
