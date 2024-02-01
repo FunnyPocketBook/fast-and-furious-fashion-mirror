@@ -9,12 +9,21 @@ import * as d3 from 'd3';
 import {computed, nextTick, onMounted, ref, watch, watchEffect} from "vue";
 import {getDetailScoreOfKeyAreas} from "../utils/data";
 import {selectedBrand} from "../store/brand-store";
+import {interaction} from "../store/interaction-store";
 
 const brands = selectedBrand
 const year = ref("2023")
 const data = computed(() => getDetailScoreOfKeyAreas(brands.value, year.value))
 
-const colors = ['#33B1FF', '#8A3FFC', '#0D8289', '#FF7EB6', '#FA4D56']
+const colors = computed(() => {
+    let result = ['#33B1FF', '#8A3FFC', '#0D8289', '#FF7EB6', '#FA4D56']
+    const index = keyAreas.indexOf(interaction.hoveringAspect)
+    console.log(index)
+    if (index !== -1) {
+        result = result.map(((c, i) => c + (i !== index ? '50': '')))
+    }
+    return result
+})
 const keyAreas = ['Governance', 'Policies', 'Traceability', 'Know, Show, & Fix', 'Spotlight Issues']
 const svgRef = ref(null)
 const drawChart = () => {
@@ -39,7 +48,7 @@ const drawChart = () => {
 
     const color = d3.scaleOrdinal()
             .domain(keyAreas)
-            .range(colors);
+            .range(colors.value);
 
     // Stack the data
     const stackedData = d3.stack()
@@ -99,13 +108,14 @@ const drawChart = () => {
 
     svgRef.value.style.height = height + margin.top + margin.bottom + 50 + 'px';
 }
-
-onMounted(drawChart)
-watch(brands, async () => {
+const redraw = async () => {
     svgRef.value.innerHTML = ''
     await nextTick()
     drawChart()
-})
+}
+
+onMounted(drawChart)
+watch([brands, colors], redraw)
 </script>
   
 <style scoped></style>

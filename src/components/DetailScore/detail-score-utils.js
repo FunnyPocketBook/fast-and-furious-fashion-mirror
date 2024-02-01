@@ -3,9 +3,16 @@ import maxScores from '../../data/max_scores.json'
 
 const getDataSet = ({ data, qQueries = [], brands = []}) => {
     const item = data[0]
-    const keys = Object
+    const keys = [...Object
         .keys(item)
         .filter(key => key !== 'Company' && key !== 'Country')
+    ]
+
+    // swap to match design
+    const temp = keys[0]
+    keys[0] = keys[1]
+    keys[1] = temp
+    console.log(keys)
 
     const questionList = []
 

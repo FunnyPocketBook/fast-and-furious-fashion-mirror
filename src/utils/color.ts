@@ -1,7 +1,7 @@
 export const colorPattenForAspects = {
-    'Policies': '#33B1FF',
-    'Governance': '#8A3FFC',
+    'Policies': '#8A3FFC',
+    'Governance': '#33B1FF',
     'Traceability': '#0D8289',
-    'Know, Show, Fix': '#FF7EB6',
+    'Know, Show, & Fix': '#FF7EB6',
     'Spotlight Issues': '#FA4D56'
 }
