@@ -1,5 +1,5 @@
 <template>
-    <div class="detail-score">
+    <div class="detail-score" @mouseleave="resetInteractionFromVis3">
         <div class="form">
             <v-combobox
                 multiple
@@ -11,7 +11,11 @@
             <v-btn variant="text" @click="qQueries=['disclose']">Disclose</v-btn>
             <v-btn variant="text" @click="qQueries=['Animal']">Animal</v-btn>
         </div>
-        <div class="vis" :style="visStyle">
+        <div v-if="selectedYear !== '2023'" class="vis-placeholder">
+            <div class="title">This visualization is only for year 2023</div>
+            <v-btn variant="outlined" size="large" @click="selectedYear='2023'">Reset to 2023</v-btn>
+        </div>
+        <div class="vis" :style="visStyle" v-else>
             <div class="left-info">
                 <div class="left-info-brand">BRAND</div>
                 <div></div>
@@ -19,6 +23,7 @@
             </div>
             <div v-for="brand in brands">
                 <div class="brand-name">{{brand}}</div>
+                <div class="brand-name-line"></div>
                 <div class="detail-container">
                     <template v-for="item in data">
                         <template v-for="subSection in item.subSections">
@@ -47,7 +52,7 @@
 <script setup>
 import {dataset, getDataSet} from "./detail-score-utils";
 import {computed, ref, watchEffect} from "vue";
-import {selectedBrand} from "../../store/brand-store";
+import {selectedBrand, selectedYear} from "../../store/brand-store";
 import {
     interactionFromVis1, interactionFromVis2,
     interactionFromVis3,
@@ -170,13 +175,22 @@ const detailItemMouseLeave = () => {
 
 .brand-name {
     text-align: center;
-    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    max-width: 80px;
+    padding-bottom: 16px;
+}
+
+.brand-name-line {
     position: relative;
     &::before {
         content: '';
         position: absolute;
         display: block;
-        bottom: -4px;
+        bottom: 8px;
         left: -6px;
         right: -6px;
         height: 1px;
@@ -209,6 +223,20 @@ const detailItemMouseLeave = () => {
     overflow: auto;
     text-overflow: ellipsis;
 }
+
+.vis-placeholder {
+    height: 680px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .title {
+        font-size: 32px;
+        opacity: .7;
+        margin-bottom: 32px;
+    }
+}
+
 .vis {
     display: grid;
     grid-column-gap: 10px;

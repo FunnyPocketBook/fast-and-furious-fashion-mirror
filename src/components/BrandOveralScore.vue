@@ -176,16 +176,14 @@ const redraw = async () => {
 }
 
 onMounted(draw)
-watch([selectedBrand, selectedYear, dataset], redraw)
+watch([selectedBrand, selectedYear, dataset, interactionFromVis2], redraw)
 watch(interactionFromVis2, () => {
-    if (interactionFromVis2.hoveringBrand) {
-        highlightedBrand.value = interactionFromVis2.hoveringBrand
-    }
+    highlightedBrand.value = interactionFromVis2.hoveringBrand
 })
 </script>
 <style>
 .grid line {
-    stroke: rgba(255, 255, 255, 0.3);
+    stroke: #666666;
     stroke-dasharray: 5, 5;
     shape-rendering: crispEdges;
 }

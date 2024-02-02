@@ -31,7 +31,15 @@ const brands = selectedBrand
 
 const year = ref(6)
 watch(year, () => {
-    selectedYear.value = year.value + 2017 + ''
+    const target = year.value + 2017 + ''
+    if (selectedYear.value !== target)
+        selectedYear.value = target
+})
+
+watch(selectedYear, () => {
+    const target = Number(selectedYear.value) - 2017
+    if (year.value !== target)
+        year.value = target
 })
 
 const hoveringLegendLabel = ref('')
@@ -78,7 +86,11 @@ const drawChart = () => {
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
+        .attr('transform', `translate(${margin.left},${margin.top})`)
+        .on('mouseleave', () => {
+            resetInteractionFromVis2()
+            hoveringLegendLabel.value = ''
+        })
 
     // Add the Y Axis label "BRAND NAME"
     svg.append('text')
@@ -105,6 +117,29 @@ const drawChart = () => {
         .domain(data.value.map(d => d.brand))
         .range([0, height])
         .padding(0.35);
+
+    // Draw gridlines
+    const makeXGridlines = () => d3.axisBottom(x).ticks(10);
+    const makeYGridlines = () => d3.axisLeft(y).ticks(5);
+
+    svg.append('g')
+            .attr('class', 'grid')
+            .attr('transform', `translate(0,${height})`)
+            .call(makeXGridlines()
+                    .tickSize(-height)
+                    .tickFormat('')
+            )
+            .selectAll("line")
+            .attr("stroke-dasharray", "5,5");
+
+    svg.append('g')
+            .attr('class', 'grid')
+            .call(makeYGridlines()
+                    .tickSize(-width)
+                    .tickFormat('')
+            )
+            .selectAll("line")
+            .attr("stroke-dasharray", "5,5");
 
     const color = d3.scaleOrdinal()
         .domain(keyAreas)
@@ -167,10 +202,12 @@ const drawChart = () => {
         .attr('transform', (d, i) => `translate(${legendLength[i]}, 0)`) // Position each legend item
             .on('mouseenter', ((_, label) => {
                 hoveringLegendLabel.value = label
+                interactionFromVis2.hoveringAspect = label
                 resetInteractionFromVis1()
             }))
             .on('mouseleave', ((_, label) => {
                 hoveringLegendLabel.value = ''
+                interactionFromVis2.hoveringAspect = label = ''
             }))
 
     legend.append('circle')
