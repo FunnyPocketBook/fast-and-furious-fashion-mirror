@@ -1,95 +1,129 @@
 <template>
-    <div>
-        <svg ref="svgRef"></svg>
-    </div>
+        <div>
+                <svg ref="svgRef"></svg>
+        </div>
 </template>
   
 <script setup>
 import * as d3 from 'd3';
-import {computed, onMounted, ref} from "vue";
-import {colorPatternForLines} from "../utils/color";
-import {getDetailScoreOfKeyAreas, getMaxPossible, getSumOfBrand} from "../utils/data";
-import {selectedBrand} from "../store/brand-store";
+import { computed, onMounted, ref } from "vue";
+import { colorPatternForLines } from "../utils/color";
+import { getDetailScoreOfKeyAreas, getMaxPossible, getSumOfBrand } from "../utils/data";
+import { selectedBrand } from "../store/brand-store";
 
 const svgRef = ref(null)
 const colors = colorPatternForLines
 
 const maxPossible = getMaxPossible()
 const dataset = computed(() => {
-    return getDetailScoreOfKeyAreas(selectedBrand.value).map((dataPerBrand, i) => ({
-        label: dataPerBrand.brand,
-        color: colors[i],
-        values: dataPerBrand.scores.map(item => ({
-            x: +new Date(item.year + '-01-01'),
-            y: 100 * getSumOfBrand(item) / maxPossible.total
+        return getDetailScoreOfKeyAreas(selectedBrand.value).map((dataPerBrand, i) => ({
+                label: dataPerBrand.brand,
+                color: colors[i],
+                values: dataPerBrand.scores.map(item => ({
+                        x: +new Date(item.year + '-01-01'),
+                        y: 100 * getSumOfBrand(item) / maxPossible.total
+                }))
         }))
-    }))
 })
 
 
 const draw = () => {
-    const margin = { top: 30, right: 20, bottom: 70, left: 50 },
-            width = 580 - margin.left - margin.right,
-            height = 480 - margin.top - margin.bottom;
+        const margin = { top: 30, right: 20, bottom: 70, left: 50 },
+                width = 580 - margin.left - margin.right,
+                height = 480 - margin.top - margin.bottom;
 
-    const xScale = d3.scaleUtc()
-            .domain([new Date("2016-08-01"), new Date("2023-07-01")])
-            .range([0, width]);
+        const xScale = d3.scaleUtc()
+                .domain([new Date("2016-08-01"), new Date("2023-07-01")])
+                .range([0, width]);
 
-    const yScale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+        const yScale = d3.scaleLinear().domain([0, 100]).range([height, 0]);
 
-    const svg = d3.select(svgRef.value)
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
+        const svg = d3.select(svgRef.value)
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const line = d3.line()
-            .x(d => xScale(d.x))
-            .y(d => yScale(d.y));
 
-    svg.append('g')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(xScale));
+        // Draw gridlines
+        const makeXGridlines = () => d3.axisBottom(xScale).ticks(5);
+        const makeYGridlines = () => d3.axisLeft(yScale).ticks(5);
 
-    svg.append('g')
-            .call(d3.axisLeft(yScale));
+        svg.append('g')
+                .attr('class', 'grid')
+                .attr('transform', `translate(0,${height})`)
+                .call(makeXGridlines()
+                        .tickSize(-height)
+                        .tickFormat('')
+                )
+                .selectAll("line")
+                .attr("stroke-dasharray", "5,5");
 
-    dataset.value.forEach(series => {
-        svg.append('path')
-                .datum(series.values)
-                .attr('fill', 'none')
-                .attr('stroke', series.color)
-                .attr('stroke-width', 3)
-                .attr('d', line);
-    });
+        svg.append('g')
+                .attr('class', 'grid')
+                .call(makeYGridlines()
+                        .tickSize(-width)
+                        .tickFormat('')
+                )
+                .selectAll("line")
+                .attr("stroke-dasharray", "5,5");
 
-    // Draw legend
-    const legend = svg.selectAll('.legend')
-            .data(dataset.value)
-            .enter()
-            .append('g')
-            .attr('class', 'legend')
-            .attr('transform', (d, i) => `translate(${i * 77},${height + margin.bottom / 2})`);
+        const line = d3.line()
+                .x(d => xScale(d.x))
+                .y(d => yScale(d.y));
 
-    legend.append('circle')
-            .attr('cx', -16)
-            .attr('cy', 8)
-            .attr('r', 4)
-            .style('fill', d => d.color);
+        svg.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(xScale));
 
-    legend.append('text')
-            .attr('x', -2)
-            .attr('y', 9)
-            .attr('dy', '.35em')
-            .style('font-size', '12px')
-            // .style('text-anchor', 'end')
-            .style('fill', 'white')
-            .text(d => d.label);
+        svg.append('g')
+                .call(d3.axisLeft(yScale));
+
+        dataset.value.forEach(series => {
+                svg.append('path')
+                        .datum(series.values)
+                        .attr('fill', 'none')
+                        .attr('stroke', series.color)
+                        .attr('stroke-width', 3)
+                        .attr('d', line);
+        });
+
+        // Draw legend
+        const legend = svg.selectAll('.legend')
+                .data(dataset.value)
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                .attr('transform', (d, i) => `translate(${i * 77},${height + margin.bottom / 2})`);
+
+        legend.append('circle')
+                .attr('cx', -16)
+                .attr('cy', 8)
+                .attr('r', 4)
+                .style('fill', d => d.color);
+
+        legend.append('text')
+                .attr('x', -2)
+                .attr('y', 9)
+                .attr('dy', '.35em')
+                .style('font-size', '12px')
+                .style('fill', 'white')
+                .text(d => d.label);
 }
 
 onMounted(draw)
 </script>
-  
-<style scoped></style>
+<style>
+.grid line {
+        stroke: rgba(255, 255, 255, 0.3);
+        stroke-dasharray: 5, 5;
+        shape-rendering: crispEdges;
+}
+
+.grid path {
+        stroke-width: 0;
+}
+</style>
+
+
   
