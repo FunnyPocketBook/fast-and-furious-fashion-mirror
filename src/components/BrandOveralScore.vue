@@ -10,6 +10,7 @@ import {computed, nextTick, onMounted, ref, watch, watchEffect} from "vue";
 import { colorPatternForLines } from "../utils/color";
 import { getDetailScoreOfKeyAreas, getMaxPossible, getSumOfBrand } from "../utils/data";
 import {selectedBrand, selectedYear} from "../store/brand-store";
+import {interactionFromVis1, interactionFromVis2, resetInteractionFromVis1} from "../store/interaction-store";
 
 const svgRef = ref(null)
 const highlightedBrand = ref('')
@@ -51,8 +52,11 @@ const draw = () => {
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-
+        .attr('transform', `translate(${margin.left},${margin.top})`)
+        .on('mouseleave', () => {
+            highlightedBrand.value = ''
+            resetInteractionFromVis1()
+        })
 
     // Draw gridlines
     const makeXGridlines = () => d3.axisBottom(xScale).ticks(5);
@@ -120,14 +124,19 @@ const draw = () => {
         svg.append('path')
             .datum(series.values)
             .attr('fill', 'none')
-            .attr('stroke', 'rgba(255,255,255,0)')
+            .attr('stroke', () =>
+                    (series.label === highlightedBrand.value)
+                            ? 'rgba(255,255,255,0.1)'
+                            : 'rgba(255,255,255,0)')
             .attr('stroke-width', 20)
             .attr('d', line)
             .on('mouseenter', () => {
                 highlightedBrand.value = series.label
+                interactionFromVis1.hoveringBrand = series.label
             })
             .on('mouseleave', () => {
                 highlightedBrand.value = ''
+                resetInteractionFromVis1()
             })
     });
 
@@ -168,6 +177,11 @@ const redraw = async () => {
 
 onMounted(draw)
 watch([selectedBrand, selectedYear, dataset], redraw)
+watch(interactionFromVis2, () => {
+    if (interactionFromVis2.hoveringBrand) {
+        highlightedBrand.value = interactionFromVis2.hoveringBrand
+    }
+})
 </script>
 <style>
 .grid line {

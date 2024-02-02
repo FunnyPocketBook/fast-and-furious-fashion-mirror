@@ -48,7 +48,12 @@
 import {dataset, getDataSet} from "./detail-score-utils";
 import {computed, ref, watchEffect} from "vue";
 import {selectedBrand} from "../../store/brand-store";
-import {interactionFromVis3, resetInteractionFromVis3} from "../../store/interaction-store";
+import {
+    interactionFromVis1, interactionFromVis2,
+    interactionFromVis3,
+    resetInteractionFromVis1, resetInteractionFromVis2,
+    resetInteractionFromVis3
+} from "../../store/interaction-store";
 import {sectionAspectMap} from "../../utils/aspects";
 import {colorPattenForAspects} from "../../utils/color";
 
@@ -104,10 +109,26 @@ const getDetailClass = (brand, detail, selection) => {
 const getDetailStyle = (brand, detail, section) => {
     const color = colorPattenForAspects[sectionAspectMap[section.section]]
     const gainedScore = detail.scores?.filter(_ => _.company === brand).filter(_ => _.score > 0).length ?? false
+
+    let notHighlightedBrand = false
+    let notHighlightedAspect = false
+    if (interactionFromVis1.hoveringBrand && interactionFromVis1.hoveringBrand !== brand) {
+        notHighlightedBrand = true
+    }
+
+    if (interactionFromVis2.hoveringBrand && interactionFromVis2.hoveringBrand !== brand) {
+        notHighlightedBrand = true
+    }
+
+    if (interactionFromVis2.hoveringAspect && interactionFromVis2.hoveringAspect !== sectionAspectMap[section.section]) {
+        notHighlightedAspect = true
+    }
+
     return {
         backgroundColor: gainedScore
-                ? color
-                // ? 'white'
+                ? notHighlightedBrand
+                        ? color + '60'
+                        : color + (notHighlightedAspect ? '80' : '')
                 : '#191a1a',
         height: `${20 * detail.maxScore}px`,
         marginBottom: questionNumber.value > 100 ? '1px' : '4px'
@@ -120,6 +141,9 @@ const detailItemMouseEnter = (brand, detail, section) => {
     interactionFromVis3.hoveringBrand = brand
     interactionFromVis3.hoveringAspect = sectionAspectMap[section.section]
     interactionFromVis3.hoveringQuestion = detail.question
+
+    resetInteractionFromVis1()
+    resetInteractionFromVis2()
 }
 
 const detailItemMouseLeave = () => {
@@ -127,8 +151,6 @@ const detailItemMouseLeave = () => {
     resetInteractionFromVis3()
 }
 
-// for debug
-// watchEffect(() => console.log(data.value))
 </script>
 
 <style scoped lang="less">

@@ -18,7 +18,12 @@ import * as d3 from 'd3';
 import { computed, nextTick, onMounted, ref, watch, watchEffect } from "vue";
 import { getDetailScoreOfKeyAreas, getMaxPossible } from "../utils/data";
 import { selectedBrand, selectedYear } from "../store/brand-store";
-import { interactionFromVis2, interactionFromVis3, resetInteractionFromVis2 } from "../store/interaction-store";
+import {
+    interactionFromVis1,
+    interactionFromVis2,
+    interactionFromVis3, resetInteractionFromVis1,
+    resetInteractionFromVis2
+} from "../store/interaction-store";
 
 const maxPossible = getMaxPossible()
 const normalizeDivisor = maxPossible.total / 100
@@ -118,6 +123,7 @@ const drawChart = () => {
         .attr('fill', d => color(d.key))
             .on('mouseenter', (_, data) => {
                 interactionFromVis2.hoveringAspect = data.key
+                resetInteractionFromVis1()
             })
             .on('mouseleave', resetInteractionFromVis2)
 
@@ -127,12 +133,18 @@ const drawChart = () => {
         .enter().append('rect')
         .attr('y', d => y(d.data.brand))
         .attr('x', d => x(d[0]) / normalizeDivisor)
+        .style('opacity', d => {
+            if (interactionFromVis1.hoveringBrand && interactionFromVis1.hoveringBrand !== d.data.brand) return .5
+            if (interactionFromVis2.hoveringBrand && interactionFromVis2.hoveringBrand !== d.data.brand) return .6
+            return 1
+        })
         .attr('width', d => x(d[1]) / normalizeDivisor - x(d[0]) / normalizeDivisor)
         .attr('height', y.bandwidth())
-            .on('mouseenter', (_, data) => {
-                interactionFromVis2.hoveringBrand = data.data.brand
-            })
-            .on('mouseleave', resetInteractionFromVis2)
+        .on('mouseenter', (_, data) => {
+            interactionFromVis2.hoveringBrand = data.data.brand
+            resetInteractionFromVis1()
+        })
+        .on('mouseleave', resetInteractionFromVis2)
 
     // Add the X Axis
     svg.append('g')
@@ -155,6 +167,7 @@ const drawChart = () => {
         .attr('transform', (d, i) => `translate(${legendLength[i]}, 0)`) // Position each legend item
             .on('mouseenter', ((_, label) => {
                 hoveringLegendLabel.value = label
+                resetInteractionFromVis1()
             }))
             .on('mouseleave', ((_, label) => {
                 hoveringLegendLabel.value = ''
@@ -183,7 +196,7 @@ const redraw = async () => {
 }
 
 onMounted(drawChart)
-watch([brands, colors, selectedYear], redraw)
+watch([brands, colors, selectedYear, interactionFromVis1, interactionFromVis2], redraw)
 </script>
   
 <style scoped>
