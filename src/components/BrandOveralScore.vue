@@ -70,19 +70,21 @@ const draw = () => {
             .enter()
             .append('g')
             .attr('class', 'legend')
-            .attr('transform', (d, i) => `translate(0,${height + margin.bottom / 2 + i * 20})`);
+            .attr('transform', (d, i) => `translate(${i * 77},${height + margin.bottom / 2})`);
 
-    legend.append('rect')
-            .attr('x', width - 20)
-            .attr('width', 18)
-            .attr('height', 18)
+    legend.append('circle')
+            .attr('cx', -16)
+            .attr('cy', 8)
+            .attr('r', 4)
             .style('fill', d => d.color);
 
     legend.append('text')
-            .attr('x', width - 24)
+            .attr('x', -2)
             .attr('y', 9)
             .attr('dy', '.35em')
-            .style('text-anchor', 'end')
+            .style('font-size', '12px')
+            // .style('text-anchor', 'end')
+            .style('fill', 'white')
             .text(d => d.label);
 }
 
