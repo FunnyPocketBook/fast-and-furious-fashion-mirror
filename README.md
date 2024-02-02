@@ -10,7 +10,7 @@ Team members:
 - Ying-Kai Dang (9389903)
 
 ## View it Online!
-The online link for our coursework is: https://superfashion.walzen.org/
+We deployed our website to a server. The online link for our coursework is: https://superfashion.walzen.org/
 
 ## Structure
 The code in /src folder is our source code.
