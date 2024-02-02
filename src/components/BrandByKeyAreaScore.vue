@@ -2,18 +2,8 @@
     <div>
         <div class="slider-container">
             <div class="title">CHANGE YEAR: </div>
-            <v-slider
-                    :ticks="years"
-                    :max="6"
-                    v-model="year"
-                    step="1"
-                    show-ticks="always"
-                    tick-size="4"
-                    color="#4a4a4a"
-                    track-color="#888888"
-                    :thumb-label="true"
-                    thumb-color="#aaaaaa"
-            >
+            <v-slider :ticks="years" :max="6" v-model="year" step="1" show-ticks="always" tick-size="4" color="#4a4a4a"
+                track-color="#888888" :thumb-label="true" thumb-color="#aaaaaa">
                 <template v-slot:thumb-label="{ modelValue }">
                     {{ modelValue + 2017 }}
                 </template>
@@ -25,10 +15,10 @@
   
 <script setup>
 import * as d3 from 'd3';
-import {computed, nextTick, onMounted, ref, watch, watchEffect} from "vue";
-import {getDetailScoreOfKeyAreas, getMaxPossible} from "../utils/data";
-import {selectedBrand, selectedYear} from "../store/brand-store";
-import {interactionFromVis2, interactionFromVis3, resetInteractionFromVis2} from "../store/interaction-store";
+import { computed, nextTick, onMounted, ref, watch, watchEffect } from "vue";
+import { getDetailScoreOfKeyAreas, getMaxPossible } from "../utils/data";
+import { selectedBrand, selectedYear } from "../store/brand-store";
+import { interactionFromVis2, interactionFromVis3, resetInteractionFromVis2 } from "../store/interaction-store";
 
 const maxPossible = getMaxPossible()
 const normalizeDivisor = maxPossible.total / 100
@@ -52,11 +42,11 @@ const years = {
 }
 const data = computed(() => {
     return getDetailScoreOfKeyAreas(brands.value)
-            .map(item => ({
-                ...item,
-                scores: undefined,
-                ...item.scores[year.value] // tired... it works at least...
-            }))
+        .map(item => ({
+            ...item,
+            scores: undefined,
+            ...item.scores[year.value] // tired... it works at least...
+        }))
 })
 
 const colors = computed(() => {
@@ -67,7 +57,7 @@ const colors = computed(() => {
     )
 
     if (index !== -1) {
-        result = result.map(((c, i) => c + (i !== index ? '70': '')))
+        result = result.map(((c, i) => c + (i !== index ? '70' : '')))
     }
     return result
 })
@@ -80,49 +70,65 @@ const drawChart = () => {
     const height = 400 - margin.top - margin.bottom;
 
     const svg = d3.select(svgRef.value)
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    // Add the Y Axis label "BRAND NAME"
+    svg.append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 0 - margin.left - 5)
+        .attr('x', 0 - (height / 2))
+        .attr('dy', '1em')
+        .style('text-anchor', 'middle')
+        .style('fill', 'white')
+        .text('BRAND NAME');
+
+    // Add the X Axis label "FINAL SCORE"
+    svg.append('text')
+        .attr('transform', `translate(${width / 2}, ${height + margin.bottom + 10})`)
+        .style('text-anchor', 'middle')
+        .style('fill', 'white')
+        .text('FINAL SCORE');
 
     const x = d3.scaleLinear()
-            .domain([0, 100]) // Assuming score is out of 50
-            .range([0, width])
+        .domain([0, 100]) // Assuming score is out of 50
+        .range([0, width])
 
     const y = d3.scaleBand()
-            .domain(data.value.map(d => d.brand))
-            .range([0, height])
-            .padding(0.35);
+        .domain(data.value.map(d => d.brand))
+        .range([0, height])
+        .padding(0.35);
 
     const color = d3.scaleOrdinal()
-            .domain(keyAreas)
-            .range(colors.value);
+        .domain(keyAreas)
+        .range(colors.value);
 
     // Stack the data
     const stackedData = d3.stack()
-            .keys(keyAreas)
-            (data.value);
+        .keys(keyAreas)
+        (data.value);
 
     // Create groups for each series
     const barGroups = svg.selectAll('g.layer')
-            .data(stackedData, d => d.key)
-            .enter().append('g')
-            .classed('layer', true)
-            .attr('fill', d => color(d.key))
+        .data(stackedData, d => d.key)
+        .enter().append('g')
+        .classed('layer', true)
+        .attr('fill', d => color(d.key))
             .on('mouseenter', (_, data) => {
                 interactionFromVis2.hoveringAspect = data.key
             })
             .on('mouseleave', resetInteractionFromVis2)
 
-
     // Create bars
     barGroups.selectAll('rect')
-            .data(d => d)
-            .enter().append('rect')
-            .attr('y', d => y(d.data.brand))
-            .attr('x', d => x(d[0]) / normalizeDivisor)
-            .attr('width', d => x(d[1]) / normalizeDivisor - x(d[0]) / normalizeDivisor)
-            .attr('height', y.bandwidth())
+        .data(d => d)
+        .enter().append('rect')
+        .attr('y', d => y(d.data.brand))
+        .attr('x', d => x(d[0]) / normalizeDivisor)
+        .attr('width', d => x(d[1]) / normalizeDivisor - x(d[0]) / normalizeDivisor)
+        .attr('height', y.bandwidth())
             .on('mouseenter', (_, data) => {
                 interactionFromVis2.hoveringBrand = data.data.brand
             })
@@ -130,23 +136,23 @@ const drawChart = () => {
 
     // Add the X Axis
     svg.append('g')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x));
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x));
 
     // Add the Y Axis
     svg.append('g')
-            .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y));
 
 
     const legendLength = [0, 100, 180, 280, 410]
     // Draw legend
     const legend = svg.append('g')
-            .attr('class', 'legend')
-            .attr('transform', `translate(0,${height + margin.bottom - 10})`) // Position the legend below the chart
-            .selectAll('g')
-            .data(color.domain())
-            .enter().append('g')
-            .attr('transform', (d, i) => `translate(${legendLength[i]}, 0)`) // Position each legend item
+        .attr('class', 'legend')
+        .attr('transform', (d, i) => `translate(${i * 77},${height + margin.bottom / 2 + 20})`) // Position the legend below the chart
+        .selectAll('g')
+        .data(color.domain())
+        .enter().append('g')
+        .attr('transform', (d, i) => `translate(${legendLength[i]}, 0)`) // Position each legend item
             .on('mouseenter', ((_, label) => {
                 hoveringLegendLabel.value = label
             }))
@@ -155,18 +161,18 @@ const drawChart = () => {
             }))
 
     legend.append('circle')
-            .attr('cx', 0)
-            .attr('cy', 28)
-            .attr('r', 4)
-            .attr('fill', color);
+        .attr('cx', 0)
+        .attr('cy', 28)
+        .attr('r', 4)
+        .attr('fill', color);
 
     legend.append('text')
-            .attr('x', 12) // Position text to the right of the rectangle
-            .attr('y', 12)
-            .attr('dy', 20)
-            .style('font-size', '12px')
-            .style('fill', 'white') // Set the text color to white
-            .text(d => d);
+        .attr('x', 12) // Position text to the right of the rectangle
+        .attr('y', 12)
+        .attr('dy', 20)
+        .style('font-size', '12px')
+        .style('fill', 'white') // Set the text color to white
+        .text(d => d);
 
     svgRef.value.style.height = height + margin.top + margin.bottom + 50 + 'px';
 }
