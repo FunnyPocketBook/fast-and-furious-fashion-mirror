@@ -28,7 +28,7 @@ import * as d3 from 'd3';
 import {computed, nextTick, onMounted, ref, watch, watchEffect} from "vue";
 import {getDetailScoreOfKeyAreas, getMaxPossible} from "../utils/data";
 import {selectedBrand, selectedYear} from "../store/brand-store";
-import {interaction} from "../store/interaction-store";
+import {interactionFromVis2, interactionFromVis3, resetInteractionFromVis2} from "../store/interaction-store";
 
 const maxPossible = getMaxPossible()
 const normalizeDivisor = maxPossible.total / 100
@@ -38,6 +38,8 @@ const year = ref(6)
 watch(year, () => {
     selectedYear.value = year.value + 2017 + ''
 })
+
+const hoveringLegendLabel = ref('')
 
 const years = {
     0: '2017',
@@ -59,9 +61,13 @@ const data = computed(() => {
 
 const colors = computed(() => {
     let result = ['#33B1FF', '#8A3FFC', '#0D8289', '#FF7EB6', '#FA4D56']
-    const index = keyAreas.indexOf(interaction.hoveringAspect)
+    let index = keyAreas.indexOf(
+            interactionFromVis3.hoveringAspect ||
+            hoveringLegendLabel.value
+    )
+
     if (index !== -1) {
-        result = result.map(((c, i) => c + (i !== index ? '50': '')))
+        result = result.map(((c, i) => c + (i !== index ? '70': '')))
     }
     return result
 })
@@ -102,7 +108,12 @@ const drawChart = () => {
             .data(stackedData, d => d.key)
             .enter().append('g')
             .classed('layer', true)
-            .attr('fill', d => color(d.key));
+            .attr('fill', d => color(d.key))
+            .on('mouseenter', (_, data) => {
+                interactionFromVis2.hoveringAspect = data.key
+            })
+            .on('mouseleave', resetInteractionFromVis2)
+
 
     // Create bars
     barGroups.selectAll('rect')
@@ -111,7 +122,11 @@ const drawChart = () => {
             .attr('y', d => y(d.data.brand))
             .attr('x', d => x(d[0]) / normalizeDivisor)
             .attr('width', d => x(d[1]) / normalizeDivisor - x(d[0]) / normalizeDivisor)
-            .attr('height', y.bandwidth());
+            .attr('height', y.bandwidth())
+            .on('mouseenter', (_, data) => {
+                interactionFromVis2.hoveringBrand = data.data.brand
+            })
+            .on('mouseleave', resetInteractionFromVis2)
 
     // Add the X Axis
     svg.append('g')
@@ -131,7 +146,13 @@ const drawChart = () => {
             .selectAll('g')
             .data(color.domain())
             .enter().append('g')
-            .attr('transform', (d, i) => `translate(${legendLength[i]}, 0)`); // Position each legend item
+            .attr('transform', (d, i) => `translate(${legendLength[i]}, 0)`) // Position each legend item
+            .on('mouseenter', ((_, label) => {
+                hoveringLegendLabel.value = label
+            }))
+            .on('mouseleave', ((_, label) => {
+                hoveringLegendLabel.value = ''
+            }))
 
     legend.append('circle')
             .attr('cx', 0)

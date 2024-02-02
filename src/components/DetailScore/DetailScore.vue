@@ -48,7 +48,7 @@
 import {dataset, getDataSet} from "./detail-score-utils";
 import {computed, ref, watchEffect} from "vue";
 import {selectedBrand} from "../../store/brand-store";
-import {interaction, resetInteraction} from "../../store/interaction-store";
+import {interactionFromVis3, resetInteractionFromVis3} from "../../store/interaction-store";
 import {sectionAspectMap} from "../../utils/aspects";
 import {colorPattenForAspects} from "../../utils/color";
 
@@ -117,14 +117,14 @@ const getDetailStyle = (brand, detail, section) => {
 const detailItemMouseEnter = (brand, detail, section) => {
     shownDetail.value = detail
 
-    interaction.hoveringBrand = brand
-    interaction.hoveringAspect = sectionAspectMap[section.section]
-    interaction.hoveringQuestion = detail.question
+    interactionFromVis3.hoveringBrand = brand
+    interactionFromVis3.hoveringAspect = sectionAspectMap[section.section]
+    interactionFromVis3.hoveringQuestion = detail.question
 }
 
 const detailItemMouseLeave = () => {
     shownDetail.value = null
-    resetInteraction()
+    resetInteractionFromVis3()
 }
 
 // for debug
