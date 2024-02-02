@@ -6,24 +6,33 @@
   
 <script setup>
 import * as d3 from 'd3';
-import { computed, onMounted, ref } from "vue";
+import {computed, nextTick, onMounted, ref, watch, watchEffect} from "vue";
 import { colorPatternForLines } from "../utils/color";
 import { getDetailScoreOfKeyAreas, getMaxPossible, getSumOfBrand } from "../utils/data";
-import { selectedBrand } from "../store/brand-store";
+import {selectedBrand, selectedYear} from "../store/brand-store";
 
 const svgRef = ref(null)
-const colors = colorPatternForLines
+const highlightedBrand = ref('')
 
 const maxPossible = getMaxPossible()
+
+const colors = colorPatternForLines
+
 const dataset = computed(() => {
-    return getDetailScoreOfKeyAreas(selectedBrand.value).map((dataPerBrand, i) => ({
-        label: dataPerBrand.brand,
-        color: colors[i],
-        values: dataPerBrand.scores.map(item => ({
-            x: +new Date(item.year + '-01-01'),
-            y: 100 * getSumOfBrand(item) / maxPossible.total
-        }))
-    }))
+    return getDetailScoreOfKeyAreas(selectedBrand.value).map((dataPerBrand, i) => {
+        let color = colors[i]
+        if (highlightedBrand.value && (highlightedBrand.value !== dataPerBrand.brand)) {
+            color = color + '70'
+        }
+        return ({
+            label: dataPerBrand.brand,
+            color,
+            values: dataPerBrand.scores.map(item => ({
+                x: +new Date(item.year + '-01-01'),
+                y: 100 * getSumOfBrand(item) / maxPossible.total
+            }))
+        });
+    })
 })
 
 
@@ -103,7 +112,23 @@ const draw = () => {
             .attr('fill', 'none')
             .attr('stroke', series.color)
             .attr('stroke-width', 3)
-            .attr('d', line);
+            .attr('d', line)
+    });
+
+    // for wider range of hover
+    dataset.value.forEach(series => {
+        svg.append('path')
+            .datum(series.values)
+            .attr('fill', 'none')
+            .attr('stroke', 'rgba(255,255,255,0)')
+            .attr('stroke-width', 20)
+            .attr('d', line)
+            .on('mouseenter', () => {
+                highlightedBrand.value = series.label
+            })
+            .on('mouseleave', () => {
+                highlightedBrand.value = ''
+            })
     });
 
     // Draw legend
@@ -112,7 +137,13 @@ const draw = () => {
         .enter()
         .append('g')
         .attr('class', 'legend')
-        .attr('transform', (d, i) => `translate(${i * 77},${height + margin.bottom / 2 + 20})`);
+        .attr('transform', (d, i) => `translate(${i * 77},${height + margin.bottom / 2 + 20})`)
+        .on('mouseenter', (_, data) => {
+            highlightedBrand.value = data.label
+        })
+        .on('mouseleave', () => {
+            highlightedBrand.value = ''
+        })
 
     legend.append('circle')
         .attr('cx', -16)
@@ -129,7 +160,14 @@ const draw = () => {
         .text(d => d.label);
 }
 
+const redraw = async () => {
+    svgRef.value.innerHTML = ''
+    await nextTick()
+    draw()
+}
+
 onMounted(draw)
+watch([selectedBrand, selectedYear, dataset], redraw)
 </script>
 <style>
 .grid line {
