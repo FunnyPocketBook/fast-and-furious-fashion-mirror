@@ -13,7 +13,7 @@
         "Discloses if the facility has a trade union and the name of the trade union",
         "If the facility has an independent worker committee",
         "Discloses length of time worked with suppliers",
-        "Discloses how the company engages with workers/producers/farmers, trade unions and any other affected stakeholders in the development and implementation of remediation/corrective action plans",
+        "Discloses how the company engages with workers/producers/farmers, trade unions and any other affected stakeholders in the development and implementation of remediation/corrective action plans"
     ],
     "Environmental Management & Sustainability": [
         "Biodiversity & Conservation",
@@ -22,7 +22,7 @@
         "Publishes an annual sustainability or corporate social responsibility report (could also be found within annual company report) that is audited or verified by an independent third party.",
         "Discloses energy consumption at facility level",
         "Discloses water consumption at facility level",
-        "Publishes annual, up-to-date disclosure of progress towards achieving the company's measurable, time-bound and long-term environmental commitments, targets or goals",
+        "Publishes annual, up-to-date disclosure of progress towards achieving the company's measurable, time-bound and long-term environmental commitments, targets or goals"
     ],
     "Worker Welfare & Benefits": [
         "Health & Safety",
@@ -32,7 +32,7 @@
         "Working Hours & Rest Breaks",
         "Overtime Pay",
         "Annual Leave & Public Holidays",
-        "Discloses direct contact details for relevant department (e.g. email address and/or phone number of sustainability or CSR team)",
+        "Discloses direct contact details for relevant department (e.g. email address and/or phone number of sustainability or CSR team)"
     ],
     "Supply Chain Transparency & Governance": [
         "Does the company state that its supplier/vendor policies are based on credible international standards such as the Ethical Trading Initiative Base Code, relevant UN and ILO Conventions, OECD Guidelines for Multinational Enterprises or the UN Global Compact",
@@ -43,30 +43,30 @@
         "Publishes description of how board level accountability is implemented in practice",
         "Worker representation on the corporate board of directors",
         "Publishes a responsible tax strategy",
-        "Discloses how employees beyond the CSR/sustainability/ethical trade team (sourcing, production, buyers, designers, merchandisers) incentives (e.g. bonuses; part of employee performance reviews) are tied to improvements in human rights impacts and environmental management",
+        "Discloses how employees beyond the CSR/sustainability/ethical trade team (sourcing, production, buyers, designers, merchandisers) incentives (e.g. bonuses; part of employee performance reviews) are tied to improvements in human rights impacts and environmental management"
     ],
     "Waste Management & Circularity": [
         "Waste & Recycling (Packaging/Office/Retail)",
         "Waste & Recycling (Product/Textiles)",
-        "Waste & Recycling (Packaging/Office/Facility)",
+        "Waste & Recycling (Packaging/Office/Facility)"
     ],
     "Water Management": [
         "Water Consumption",
-        "Water Effluents & Treatment",
+        "Water Effluents & Treatment"
     ],
     "Chemical Management": [
         "Restricted Substance List (RSL)",
-        "Manufacturing Restricted Substances List (MRSL)",
+        "Manufacturing Restricted Substances List (MRSL)"
     ],
     "Ethical Practices & Compliance": [
         "Anti-bribery, Corruption, & Presentation of False Information",
-        "Discloses how executive (e.g. CEO, CFO, president) pay, bonuses and/or performance reviews are tied to improvements in human rights impacts and environmental management",
+        "Discloses how executive (e.g. CEO, CFO, president) pay, bonuses and/or performance reviews are tied to improvements in human rights impacts and environmental management"
     ],
     "Community & Social Engagement": [
         "Animal Welfare",
         "Community Engagement",
         "Diversity & Inclusion",
         "Publishes measurable, time-bound and long-term commitments, targets or goals on improving human rights",
-        "Annual, up-to-date disclosure of progress towards achieving the company's measurable, time-bound and long-term human rights commitments, targets or goals",
+        "Annual, up-to-date disclosure of progress towards achieving the company's measurable, time-bound and long-term human rights commitments, targets or goals"
     ]
 }
