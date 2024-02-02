@@ -10,9 +10,17 @@
             <div class="button" @click="qQueries=[]">Show All</div>
             <hr style="margin: 8px 0">
             <div
-                class="button"
-                v-for="question in Object.keys(presetQuestions)"
-                @click="qQueries = [question]"
+                    class="button"
+                    v-for="(key, value) in keys"
+                    @click="qQueries=[value]"
+            >
+                {{key}}
+            </div>
+            <hr style="margin: 8px 0">
+            <div
+                    class="button"
+                    v-for="question in Object.keys(presetQuestions)"
+                    @click="qQueries = [question]"
             >{{ question }}</div>
             <div class="button" @click="qQueries=['disclose']">Disclosure</div>
         </div>
@@ -78,6 +86,14 @@ const data = computed(() => getDataSet({
     brands: selectedBrand.value
 }))
 
+const keys = {
+    '2. GOVERNANCE': 'Governance',
+    '1. POLICY & COMMITMENTS': 'Policies',
+    '3. TRACEABILITY': 'Traceability',
+    '4. KNOW, SHOW & FIX': 'Know, Show, & Fix',
+    '5. SPOTLIGHT ISSUES': 'Spotlight Issues'
+}
+
 const questionNumber = computed(() => {
     let result = 0
     data.value.forEach(section => {
@@ -140,10 +156,10 @@ const getDetailStyle = (brand, detail, section) => {
     return {
         backgroundColor: gainedScore
                 ? notHighlightedBrand
-                        ? color + '60'
+                        ? color + '50'
                         : color + (notHighlightedAspect ? '80' : '')
                 : '#191a1a',
-        height: `${40 * detail.maxScore}px`,
+        height: `${25 * detail.maxScore}px`,
         marginBottom: questionNumber.value > 100 ? '1px' : '4px'
     }
 }

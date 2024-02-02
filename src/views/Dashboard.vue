@@ -18,8 +18,13 @@
                 </div>
                 <div class="vis last-vis">
                     <div class="title">Score breakdown</div>
-                    <div class="desc">To calculate their scores in each key area, brands had to answer over 300 questions regarding important issues, such as the ones below.  If a brand has 0 points for a question, it means
-                        they refused to answer the question. A score of 1 means they have disclosed what their practices are, which increases their transparency.</div>
+                    <div class="desc">To calculate their scores in each key area,
+                        brands were required to answer more than 300 questions concerning important issues.
+                        You can explore all the questions here. <br>
+                        If a brand scores 0 points for a question,
+                        it indicates that they either failed to meet the scoring criteria or chose not to answer the question.
+                        For each question, a brand can either receive a full mark or no mark at all.
+                        Different questions may carry different weights.</div>
                     <DetailScore class="card"/>
                 </div>
             </div>
@@ -81,7 +86,6 @@ const bgImageUrl = `url(${backgroundImage})`
     .desc {
         font-size: 16px;
         font-weight: 500;
-        line-height: 100%; /* 16px */
         letter-spacing: 0.15px;
         margin-top: -10px;
         margin-bottom: 18px;

@@ -3,6 +3,9 @@
 ### Information Visualization Coursework for Group 5
 
 Team members: 
+- Michalina Modzelewska 8658676
+- Yangfan Chen 5194652
+- 
 
 ## View it Online!
 The online link for our coursework is: https://superfashion.walzen.org/

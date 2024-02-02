@@ -21,6 +21,11 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
     // preset questions
     if (Object.keys(presetQuestions).indexOf(qQueries[0]) !== -1) {
         presetQuestionList = presetQuestions[qQueries[0]]
+    } else if (keys.indexOf(qQueries[0]) !== -1) {
+        Object.keys(item[qQueries]).forEach(subSectionKey => {
+            console.log(Object.keys(item[qQueries][subSectionKey]))
+            presetQuestionList = presetQuestionList.concat(Object.keys(item[qQueries][subSectionKey]))
+        })
     }
 
     return keys
