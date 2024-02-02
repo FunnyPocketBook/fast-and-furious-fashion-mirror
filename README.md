@@ -1,5 +1,17 @@
-# fast-and-furious-fashion
+# Fast and Furious Fashion
 
+### Information Visualization Coursework for Group 5
+
+Team members: 
+
+## View it Online!
+The online link for our coursework is: https://superfashion.walzen.org/
+
+## Structure
+The code in /src folder is our source code.
+The libraries we used can be seen in `package.json` file.
+
+## Environment: 
 node version: 20 TLS
 
 ## Project setup

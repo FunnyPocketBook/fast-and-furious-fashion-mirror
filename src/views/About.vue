@@ -5,7 +5,7 @@
                 <!-- Text Column General about -->
                 <v-col>
                     <h1>About</h1>
-                    <p>This dashboard is useful for finding out which top brands reveal what their business practices are.
+                    <p>This website is useful for finding out which top brands reveal what their business practices are.
                     </p>
                     <p>While it does not explicitly state whether the brand’s practices are good or bad, it is typically the
                         case that a brand does not disclose their protocols if they are not ethical.</p>

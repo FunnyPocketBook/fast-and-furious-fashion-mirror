@@ -2,7 +2,7 @@
     <div class="nav-bar">
         <div class="title"></div>
 
-        <v-btn variant="text" to="/">Dashboard</v-btn>
+        <v-btn variant="text" to="/">Explore</v-btn>
         <v-btn variant="text" to="/about">About</v-btn>
     </div>
 </template>
