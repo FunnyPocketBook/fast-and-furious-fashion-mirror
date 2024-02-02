@@ -1,5 +1,6 @@
 import dataset from '../../data/fashion_2023.json'
 import maxScores from '../../data/max_scores.json'
+import {presetQuestions} from "./preset-questions";
 
 const getDataSet = ({ data, qQueries = [], brands = []}) => {
     const item = data[0]
@@ -12,9 +13,15 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
     const temp = keys[0]
     keys[0] = keys[1]
     keys[1] = temp
-    console.log(keys)
 
     const questionList = []
+
+    let presetQuestionList = []
+
+    // preset questions
+    if (Object.keys(presetQuestions).indexOf(qQueries[0]) !== -1) {
+        presetQuestionList = presetQuestions[qQueries[0]]
+    }
 
     return keys
         .map(key => ({
@@ -24,9 +31,11 @@ const getDataSet = ({ data, qQueries = [], brands = []}) => {
                     subsectionTitle: subSectionKey,
                     questions: Object.keys(item[key][subSectionKey])
                         .filter(question => questionList.indexOf(question) === -1) // repeated question
-                        .filter(question => qQueries.length
-                            ? qQueries.filter(_ => question.toLowerCase().includes(_.toLowerCase())).length > 0
-                            : true
+                        .filter(question => presetQuestionList.length
+                            ? presetQuestionList.indexOf(question) !== -1
+                            : qQueries.length
+                                ? qQueries.filter(_ => question.toLowerCase().includes(_.toLowerCase())).length > 0
+                                : true
                         )
                         .map(question => {
                             questionList.push(question)

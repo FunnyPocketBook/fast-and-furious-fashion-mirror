@@ -78,7 +78,7 @@ const keyAreas = ['Governance', 'Policies', 'Traceability', 'Know, Show, & Fix',
 
 const svgRef = ref(null)
 const drawChart = () => {
-    const margin = { top: 30, right: 20, bottom: 30, left: 50 };
+    const margin = { top: 30, right: 20, bottom: 30, left: 80 };
     const width = 580 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -240,7 +240,7 @@ watch([brands, colors, selectedYear, interactionFromVis1, interactionFromVis2], 
 .slider-container {
     display: grid;
     align-items: center;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: 120px 1fr;
     margin-bottom: -24px;
 
     .title {

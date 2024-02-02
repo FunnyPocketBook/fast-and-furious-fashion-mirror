@@ -26,11 +26,11 @@ export const getDetailScoreOfKeyAreas = (brands: string[]) => {
                 brand,
                 scores: years.map(year => ({
                     year,
-                    Governance: dataset[brand][year].section1,
-                    Policies: dataset[brand][year].section2,
-                    Traceability: dataset[brand][year].section3,
-                    'Know, Show, & Fix': dataset[brand][year].section4,
-                    'Spotlight Issues': dataset[brand][year].section5,
+                    Governance: dataset[brand]?.[year]?.section1 ?? 0,
+                    Policies: dataset[brand]?.[year]?.section2 ?? 0,
+                    Traceability: dataset[brand]?.[year]?.section3 ?? 0,
+                    'Know, Show, & Fix': dataset[brand]?.[year]?.section4 ?? 0,
+                    'Spotlight Issues': dataset[brand]?.[year]?.section5 ?? 0,
                 }))
             }
         })

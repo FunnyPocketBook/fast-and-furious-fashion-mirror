@@ -4,12 +4,17 @@
             <v-combobox
                 multiple
                 v-model="qQueries"
-                label="Combobox"
+                label="Search by keyword"
                 variant="outlined"
             ></v-combobox>
-            <v-btn variant="text" @click="qQueries=[]">All</v-btn>
-            <v-btn variant="text" @click="qQueries=['disclose']">Disclose</v-btn>
-            <v-btn variant="text" @click="qQueries=['Animal']">Animal</v-btn>
+            <div class="button" @click="qQueries=[]">Show All</div>
+            <hr style="margin: 8px 0">
+            <div
+                class="button"
+                v-for="question in Object.keys(presetQuestions)"
+                @click="qQueries = [question]"
+            >{{ question }}</div>
+            <div class="button" @click="qQueries=['disclose']">Disclosure</div>
         </div>
         <div v-if="selectedYear !== '2023'" class="vis-placeholder">
             <div class="title">This visualization is only for year 2023</div>
@@ -43,6 +48,8 @@
             <div class="info-panel" v-if="shownDetail?.question">
                 <div class="title">STATEMENT</div>
                 <div class="content">{{shownDetail.question}}</div>
+                <br>
+                <div>Maximal Score: {{shownDetail.maxScore}}</div>
             </div>
             <div v-else></div>
         </div>
@@ -61,6 +68,7 @@ import {
 } from "../../store/interaction-store";
 import {sectionAspectMap} from "../../utils/aspects";
 import {colorPattenForAspects} from "../../utils/color";
+import {presetQuestions} from "./preset-questions";
 
 const brands = selectedBrand
 const qQueries = ref([])
@@ -135,7 +143,7 @@ const getDetailStyle = (brand, detail, section) => {
                         ? color + '60'
                         : color + (notHighlightedAspect ? '80' : '')
                 : '#191a1a',
-        height: `${20 * detail.maxScore}px`,
+        height: `${40 * detail.maxScore}px`,
         marginBottom: questionNumber.value > 100 ? '1px' : '4px'
     }
 }
@@ -287,5 +295,15 @@ const detailItemMouseLeave = () => {
 
 .left-info {
     text-align: center;
+}
+
+.button {
+    padding: 8px 8px;
+    transition: all .1s;
+
+    &:hover {
+        background: #3a3a3a;
+        border-radius: 8px;
+    }
 }
 </style>

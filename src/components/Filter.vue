@@ -11,6 +11,8 @@
             label="Brands"
             multiple
             auto-select-first
+            chips
+            closable-chips
     >
         <template v-slot:no-data>
             <v-list-item>
@@ -18,15 +20,6 @@
                     No results matching "<strong>{{ search }}</strong>".
                 </v-list-item-title>
             </v-list-item>
-        </template>
-
-        <template v-slot:selection="data">
-            <v-chip v-bind="data.attrs" :model-value="data.selected">
-                <template v-slot:prepend>
-                    <v-avatar class="bg-accent text-uppercase" start>{{ data.item.title.slice(0, 1) }}</v-avatar>
-                </template>
-                {{ data.item.title }}
-            </v-chip>
         </template>
     </v-combobox>
 
@@ -61,7 +54,7 @@ const snackbar = ref(false)
 const snackbarText = ref('')
 
 // temporary: init 5 brands here
-selectedBrand.value = ['Nike', 'Zara', 'H&M', 'Primark', 'Puma', 'Gucci', 'Adidas']
+selectedBrand.value = ['Burberry', 'Primark', 'H&M', 'Gucci', 'Adidas', 'SHEIN']
 
 watch(selectedBrand, (newValue, oldValue) => {
     // add new brand
